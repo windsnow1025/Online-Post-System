@@ -1,0 +1,35 @@
+### Get Users
+
+GET {{baseUrl}}/users
+Authorization: Bearer {{token}}
+
+### Get User
+
+GET {{baseUrl}}/users/user
+Authorization: Bearer {{token}}
+
+### Sign Up
+
+POST {{baseUrl}}/users/user
+Content-Type: application/json
+
+{
+  "username": "test",
+  "password": "test"
+}
+
+### Update User
+
+PUT {{baseUrl}}/users/user
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "username": "test",
+  "password": "test"
+}
+
+### Delete User
+
+DELETE {{baseUrl}}/users/user
+Authorization: Bearer {{token}}
