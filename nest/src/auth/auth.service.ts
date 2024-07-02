@@ -14,6 +14,10 @@ export class AuthService {
   async getToken(username: string, password: string) {
     const user = await this.usersService.findOneByUsername(username);
 
+    if (!user) {
+      throw new UnauthorizedException();
+    }
+
     const hash = user.password;
     const isMatch = await bcrypt.compare(password, hash);
     if (!isMatch) {
