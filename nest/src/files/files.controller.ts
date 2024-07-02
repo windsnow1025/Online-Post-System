@@ -15,7 +15,6 @@ import { MinioService } from './minio.service';
 @Controller('files')
 export class FilesController {
   constructor(
-    private readonly configService: ConfigService,
     private readonly minioService: MinioService,
   ) {}
 
@@ -30,7 +29,6 @@ export class FilesController {
   ) {
     const protocol = forwardedProto || req.protocol;
     const host = forwardedHost || req.get('host');
-    // const baseUrl = this.configService.get<string>('baseUrl')!;
 
     const fileName = await this.minioService.uploadFile(file);
     const fileUrl = this.minioService.getFileUrl(protocol, host, fileName);

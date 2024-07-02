@@ -67,6 +67,7 @@ export class MinioService {
   }
 
   getFileUrl(protocol: string, host: string, fileName: string): string {
+    // const baseUrl = this.configService.get<string>('baseUrl')!;
     const port = this.configService.get<number>('minio.port');
     const url = new URL(`${protocol}://${host}`);
     const hostname = url.hostname;
