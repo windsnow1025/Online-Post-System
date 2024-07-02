@@ -66,7 +66,10 @@ export class MinioService {
     return fileName;
   }
 
-  getFileUrl(fileName: string): string {
-    return `${this.configService.get<string>('minio.endPoint')}:${this.configService.get<number>('minio.port')}/${this.bucketName}/${fileName}`;
+  getFileUrl(protocol: string, host: string, fileName: string): string {
+    const port = this.configService.get<number>('minio.port');
+    const url = new URL(`${protocol}://${host}`);
+    const hostname = url.hostname;
+    return `${protocol}://${hostname}:${port}/${this.bucketName}/${fileName}`;
   }
 }
