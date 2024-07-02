@@ -15,7 +15,7 @@ export default () => {
     jwtSecret: process.env.JWT_SECRET,
     minio: {
       endPoint: isProduction ? 'minio' : 'localhost',
-      port: 9000,
+      port: isProduction ? 9000 : 9002,
       useSSL: false,
       accessKey: process.env.MINIO_ACCESS_KEY,
       secretKey: process.env.MINIO_SECRET_KEY,
