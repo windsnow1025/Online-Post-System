@@ -76,7 +76,7 @@ export class MinioService {
       const minioPort = this.configService.get<number>('minio.port');
       minioHost = `${hostname}:${minioPort}`;
     } else {
-      minioHost = hostname;
+      minioHost = host;
     }
 
     return `${protocol}://${minioHost}${minioBaseUrl}/${this.bucketName}/${fileName}`;
