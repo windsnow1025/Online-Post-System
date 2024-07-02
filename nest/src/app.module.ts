@@ -12,6 +12,8 @@ import { AuthModule } from './auth/auth.module';
 import { User } from './users/user.entity';
 import { UsersModule } from './users/users.module';
 import { FilesModule } from './files/files.module';
+import { Post } from './post/post.entity';
+import { PostsModule } from './post/post.module';
 
 @Module({
   imports: [
@@ -29,7 +31,7 @@ import { FilesModule } from './files/files.module';
         username: configService.get<string>('mysql.user'),
         password: configService.get<string>('mysql.password'),
         database: configService.get<string>('mysql.database'),
-        entities: [User],
+        entities: [User, Post],
         synchronize: true,
       }),
     }),
@@ -37,6 +39,7 @@ import { FilesModule } from './files/files.module';
     AuthModule,
     UsersModule,
     FilesModule,
+    PostsModule,
   ],
   controllers: [AppController],
   providers: [

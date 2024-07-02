@@ -1,6 +1,7 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany } from 'typeorm';
 import { Role } from '../common/enums/role.enum';
 import { BaseEntity } from '../common/entities/base.entity';
+import { Post } from '../post/post.entity';
 
 @Entity()
 export class User extends BaseEntity {
@@ -28,4 +29,7 @@ export class User extends BaseEntity {
 
   @Column({ type: 'float', default: 0 })
   credit: number;
+
+  @OneToMany(() => Post, (post) => post.user)
+  posts: Post[];
 }

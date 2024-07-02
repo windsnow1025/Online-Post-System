@@ -1,0 +1,34 @@
+### Get Posts
+
+GET {{baseUrl}}/posts
+Authorization: Bearer {{token}}
+
+### Create Post
+
+POST {{baseUrl}}/posts/post
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "title": "Test title",
+  "content": "Test content",
+  "url": "https://www.google.com/"
+}
+
+### Update Post
+
+PUT {{baseUrl}}/posts/post
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "id": 1,
+  "title": "Test title",
+  "content": "Test content",
+  "url": "https://www.google.com/"
+}
+
+### Delete Post
+
+DELETE {{baseUrl}}/posts/post/1
+Authorization: Bearer {{token}}

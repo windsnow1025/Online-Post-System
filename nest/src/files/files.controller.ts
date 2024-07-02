@@ -8,7 +8,6 @@ import {
 } from '@nestjs/common';
 import { Public } from '../common/decorators/public.decorator';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ConfigService } from '@nestjs/config';
 import { Request } from 'express';
 import { MinioService } from './minio.service';
 
