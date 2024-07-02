@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, Logger } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
@@ -24,16 +24,25 @@ import { PostsModule } from './post/post.module';
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        type: 'mysql',
-        host: configService.get<string>('mysql.host'),
-        port: 3307,
-        username: configService.get<string>('mysql.user'),
-        password: configService.get<string>('mysql.password'),
-        database: configService.get<string>('mysql.database'),
-        entities: [User, Post],
-        synchronize: true,
-      }),
+      useFactory: (configService: ConfigService) => {
+        console.log(`Database Host: ${configService.get<string>('mysql.host')}`);
+        console.log(`Database Port: ${configService.get<number>('mysql.port', 3307)}`);
+        console.log(`Database Username: ${configService.get<string>('mysql.user')}`);
+        console.log(`Database Password: ${configService.get<string>('mysql.password')}`);
+        console.log(`Database Name: ${configService.get<string>('mysql.database')}`);
+
+        return {
+          type: 'mysql',
+          host: configService.get<string>('mysql.host'),
+          port: configService.get<number>('mysql.port', 3307),
+          username: configService.get<string>('mysql.user'),
+          password: configService.get<string>('mysql.password'),
+          database: configService.get<string>('mysql.database'),
+          entities: [User, Post],
+          synchronize: true,
+          logging: true,
+        };
+      },
     }),
     JwtModule,
     AuthModule,
