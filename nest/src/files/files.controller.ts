@@ -14,9 +14,7 @@ import { MinioService } from './minio.service';
 
 @Controller('files')
 export class FilesController {
-  constructor(
-    private readonly minioService: MinioService,
-  ) {}
+  constructor(private readonly minioService: MinioService) {}
 
   @Public()
   @Post('file')
