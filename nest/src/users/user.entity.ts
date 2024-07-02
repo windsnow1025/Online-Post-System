@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { Role } from '../common/enums/role.enum';
 import { BaseEntity } from '../common/entities/base.entity';
 import { Post } from '../post/post.entity';

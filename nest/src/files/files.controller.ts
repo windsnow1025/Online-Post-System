@@ -25,7 +25,7 @@ export class FilesController {
     @UploadedFile() file: Express.Multer.File,
   ) {
     const protocol = forwardedProto || req.protocol;
-    const host = forwardedHost || req.get('host');
+    const host = forwardedHost || req.get('host')!;
 
     const fileName = await this.minioService.uploadFile(file);
     const fileUrl = this.minioService.getFileUrl(protocol, host, fileName);

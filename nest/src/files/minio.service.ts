@@ -10,13 +10,13 @@ export class MinioService {
 
   constructor(private readonly configService: ConfigService) {
     this.minioClient = new Client({
-      endPoint: this.configService.get<string>('minio.endPoint'),
+      endPoint: this.configService.get<string>('minio.endPoint')!,
       port: this.configService.get<number>('minio.port'),
       useSSL: this.configService.get<boolean>('minio.useSSL'),
-      accessKey: this.configService.get<string>('minio.accessKey'),
-      secretKey: this.configService.get<string>('minio.secretKey'),
+      accessKey: this.configService.get<string>('minio.accessKey')!,
+      secretKey: this.configService.get<string>('minio.secretKey')!,
     });
-    this.bucketName = this.configService.get<string>('minio.bucketName');
+    this.bucketName = this.configService.get<string>('minio.bucketName')!;
     this.initializeBucket();
   }
 
@@ -67,10 +67,18 @@ export class MinioService {
   }
 
   getFileUrl(protocol: string, host: string, fileName: string): string {
-    // const baseUrl = this.configService.get<string>('baseUrl')!;
-    const port = this.configService.get<number>('minio.port');
+    const minioBaseUrl = this.configService.get<string>('minioBaseUrl')!;
     const url = new URL(`${protocol}://${host}`);
     const hostname = url.hostname;
-    return `${protocol}://${hostname}:${port}/${this.bucketName}/${fileName}`;
+
+    let minioHost: string;
+    if (minioBaseUrl === '') {
+      const minioPort = this.configService.get<number>('minio.port');
+      minioHost = `${hostname}:${minioPort}`;
+    } else {
+      minioHost = hostname;
+    }
+
+    return `${protocol}://${minioHost}${minioBaseUrl}/${this.bucketName}/${fileName}`;
   }
 }
