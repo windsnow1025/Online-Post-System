@@ -15,7 +15,7 @@ export default () => {
     minio: {
       endPoint: isProduction ? 'minio' : 'localhost',
       port: 9000,
-      useSSL: isProduction,
+      useSSL: false,
       accessKey: process.env.MINIO_ACCESS_KEY,
       secretKey: process.env.MINIO_SECRET_KEY,
       bucketName: 'uploads',
