@@ -20,5 +20,6 @@ export default () => {
       secretKey: process.env.MINIO_SECRET_KEY,
       bucketName: 'uploads',
     },
+    minioBaseUrl: isProduction ? '/minio' : '',
   };
 };
