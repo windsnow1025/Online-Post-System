@@ -39,7 +39,21 @@ export class PostsController {
     return this.postsService.toPostDto(updatedPost);
   }
 
-  @Put('/post/:id/status')
+  @Delete('/post/:id')
+  async delete(@Request() req: RequestWithUser, @Param('id') id: number) {
+    const userId = req.user.sub;
+    const deletedPost = await this.postsService.remove(userId, id);
+    return this.postsService.toPostDto(deletedPost);
+  }
+
+  @Get('/admin')
+  @Roles(Role.Admin)
+  async findAll() {
+    const posts = await this.postsService.findAll();
+    return posts.map((post) => this.postsService.toPostDto(post));
+  }
+
+  @Put('/admin/post/:id/status')
   @Roles(Role.Admin)
   async updateStatus(
     @Param('id') id: number,
@@ -47,12 +61,5 @@ export class PostsController {
   ) {
     const updatedPost = await this.postsService.updateStatus(id, status);
     return this.postsService.toPostDto(updatedPost);
-  }
-
-  @Delete('/post/:id')
-  async delete(@Request() req: RequestWithUser, @Param('id') id: number) {
-    const userId = req.user.sub;
-    const deletedPost = await this.postsService.remove(userId, id);
-    return this.postsService.toPostDto(deletedPost);
   }
 }

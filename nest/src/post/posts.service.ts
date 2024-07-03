@@ -49,6 +49,12 @@ export class PostsService {
     });
   }
 
+  async findAll() {
+    return this.postsRepository.find({
+      relations: ['user'],
+    });
+  }
+
   async findOne(userId: number, id: number) {
     const post = await this.postsRepository.findOne({
       where: { id },

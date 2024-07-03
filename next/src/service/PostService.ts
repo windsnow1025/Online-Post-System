@@ -56,9 +56,17 @@ export default class PostService {
     });
   }
 
+  async fetchAllPosts(): Promise<Post> {
+    const token = localStorage.getItem('token');
+    const res = await this.axiosInstance.get(`/posts/admin/`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    return res.data;
+  }
+
   async updatePostStatus(id: number, status: PostStatus): Promise<Post> {
     const token = localStorage.getItem('token');
-    const res = await this.axiosInstance.put(`/posts/post/${id}/status`, {
+    const res = await this.axiosInstance.put(`/posts/admin/post/${id}/status`, {
       status
     }, {
       headers: { Authorization: `Bearer ${token}` }

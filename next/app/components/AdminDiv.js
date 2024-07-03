@@ -5,7 +5,6 @@ import {
   Typography,
   CircularProgress,
   Box,
-  IconButton,
   Snackbar,
   Alert,
   Grid,
@@ -28,7 +27,7 @@ function AdminDiv() {
     const fetchPosts = async () => {
       const postService = new PostService();
       try {
-        const fetchedPosts = await postService.fetchPosts();
+        const fetchedPosts = await postService.fetchAllPosts();
         setPosts(fetchedPosts);
       } catch (err) {
         setError("Failed to fetch posts.");
