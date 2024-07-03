@@ -170,24 +170,28 @@ function PostDiv() {
                 rows={4}
               />
             </Grid>
-            <Grid item xs={12}>
-              <Button variant="contained" component="label" startIcon={<UploadFileIcon />}>
-                Select File
-                <input type="file" hidden onChange={handleFileChange} />
-              </Button>
-              {file && <Typography variant="body2" color="text.secondary" ml={2}>{file.name}</Typography>}
-              {uploading && <LinearProgress />}
+            <Grid item xs={12} container spacing={2}>
+              <Grid item>
+                <Button variant="contained" component="label" startIcon={<UploadFileIcon />}>
+                  Select File
+                  <input type="file" hidden onChange={handleFileChange} />
+                </Button>
+              </Grid>
+              <Grid item>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={handlePostSubmit}
+                  disabled={loading}
+                  startIcon={<AddCircleOutlineIcon />}
+                >
+                  Submit Post
+                </Button>
+              </Grid>
             </Grid>
             <Grid item xs={12}>
-              <Button
-                variant="contained"
-                color="secondary"
-                onClick={handlePostSubmit}
-                disabled={loading}
-                startIcon={<AddCircleOutlineIcon />}
-              >
-                Submit Post
-              </Button>
+              {file && <Typography variant="body2" color="text.secondary" ml={2}>{file.name}</Typography>}
+              {uploading && <LinearProgress />}
             </Grid>
           </Grid>
           {loading && <CircularProgress />}
