@@ -3,15 +3,15 @@
 import React, {useEffect} from "react";
 import {ThemeProvider} from "@mui/material/styles";
 import {CssBaseline} from "@mui/material";
-import useThemeHandler from "../app/hooks/useThemeHandler";
-import HeaderAppBar from "../app/components/common/HeaderAppBar";
-import PostDiv from "../app/components/PostDiv";
+import useThemeHandler from "../../app/hooks/useThemeHandler";
+import HeaderAppBar from "../../app/components/common/HeaderAppBar";
+import AdminDiv from "../../app/components/AdminDiv";
 
 function Index() {
   const {systemTheme, setSystemTheme, muiTheme} = useThemeHandler();
 
   useEffect(() => {
-    document.title = "Online Post System";
+    document.title = "Admin";
   }, []);
 
   return (
@@ -19,12 +19,12 @@ function Index() {
       <CssBaseline enableColorScheme/>
       <div className="local-scroll-root">
         <HeaderAppBar
-          title="Online Post System"
+          title="Admin"
           systemTheme={systemTheme}
           setSystemTheme={setSystemTheme}
         />
         <div className="local-scroll-scrollable flex-around m-2">
-          <PostDiv/>
+          <AdminDiv/>
         </div>
       </div>
     </ThemeProvider>
