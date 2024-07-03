@@ -1,6 +1,21 @@
 import React, { useEffect, useState } from "react";
-import { TextField, Button, Card, CardContent, Typography, CircularProgress, Box, IconButton } from "@mui/material";
+import {
+  TextField,
+  Button,
+  Card,
+  CardContent,
+  Typography,
+  CircularProgress,
+  Box,
+  IconButton,
+  Grid,
+  Snackbar,
+  Alert,
+  LinearProgress
+} from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
+import UploadFileIcon from '@mui/icons-material/UploadFile';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import FileService from "../../src/service/FileService";
 import PostService from "../../src/service/PostService";
 
@@ -10,6 +25,7 @@ function PostDiv() {
   const [file, setFile] = useState(null);
   const [fileUrl, setFileUrl] = useState("");
   const [loading, setLoading] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const [posts, setPosts] = useState([]);
@@ -41,7 +57,7 @@ function PostDiv() {
       return;
     }
 
-    setLoading(true);
+    setUploading(true);
     setError(null);
     setSuccess(null);
 
@@ -55,7 +71,7 @@ function PostDiv() {
       setError("Failed to upload file.");
       console.error(err);
     } finally {
-      setLoading(false);
+      setUploading(false);
     }
   };
 
@@ -117,37 +133,48 @@ function PostDiv() {
           <Typography variant="h5" component="div">
             Create a New Post
           </Typography>
-          <TextField
-            label="Title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            label="Content"
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            fullWidth
-            margin="normal"
-            multiline
-            rows={4}
-          />
-          <Box mt={2}>
-            <Button variant="contained" component="label">
-              Select File
-              <input type="file" hidden onChange={handleFileChange} />
-            </Button>
-            {file && <Typography variant="body2" color="text.secondary" ml={2}>{file.name}</Typography>}
-          </Box>
-          <Box mt={2} display="flex" gap={2}>
-            <Button variant="contained" color="secondary" onClick={handlePostSubmit} disabled={loading}>
-              Submit Post
-            </Button>
-          </Box>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <TextField
+                label="Title"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                fullWidth
+                margin="normal"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                label="Content"
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+                fullWidth
+                margin="normal"
+                multiline
+                rows={4}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <Button variant="contained" component="label" startIcon={<UploadFileIcon />}>
+                Select File
+                <input type="file" hidden onChange={handleFileChange} />
+              </Button>
+              {file && <Typography variant="body2" color="text.secondary" ml={2}>{file.name}</Typography>}
+              {uploading && <LinearProgress />}
+            </Grid>
+            <Grid item xs={12}>
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={handlePostSubmit}
+                disabled={loading}
+                startIcon={<AddCircleOutlineIcon />}
+              >
+                Submit Post
+              </Button>
+            </Grid>
+          </Grid>
           {loading && <CircularProgress />}
-          {error && <Typography color="error">{error}</Typography>}
-          {success && <Typography color="primary">{success}</Typography>}
         </CardContent>
       </Card>
 
@@ -182,6 +209,17 @@ function PostDiv() {
           </Card>
         ))
       )}
+
+      <Snackbar open={!!error} autoHideDuration={6000} onClose={() => setError(null)}>
+        <Alert onClose={() => setError(null)} severity="error" sx={{ width: '100%' }}>
+          {error}
+        </Alert>
+      </Snackbar>
+      <Snackbar open={!!success} autoHideDuration={6000} onClose={() => setSuccess(null)}>
+        <Alert onClose={() => setSuccess(null)} severity="success" sx={{ width: '100%' }}>
+          {success}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }
