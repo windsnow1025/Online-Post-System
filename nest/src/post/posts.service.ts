@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
-import { Post } from './post.entity';
+import { Post, PostStatus } from './post.entity';
 import { UsersService } from '../users/users.service';
 import { PostDto } from './dto/post.dto';
 
@@ -23,6 +23,7 @@ export class PostsService {
       title: post.title,
       content: post.content,
       url: post.url,
+      status: post.status,
       user: this.usersService.toUserDto(post.user),
     };
     return postDto;
@@ -71,6 +72,7 @@ export class PostsService {
       throw new NotFoundException('User not found');
     }
 
+    post.status = PostStatus.PENDING;
     post.user = user;
     return await this.postsRepository.save(post);
   }
@@ -84,6 +86,22 @@ export class PostsService {
     post.title = newPost.title;
     post.content = newPost.content;
     post.url = newPost.url;
+    post.status = PostStatus.PENDING;
+
+    return await this.postsRepository.save(post);
+  }
+
+  async updateStatus(id: number, status: PostStatus) {
+    const post = await this.postsRepository.findOne({
+      where: { id },
+      relations: ['user'],
+    });
+
+    if (!post) {
+      throw new NotFoundException('Post not found');
+    }
+
+    post.status = status;
 
     return await this.postsRepository.save(post);
   }

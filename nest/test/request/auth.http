@@ -1,4 +1,4 @@
-### Sign In
+### Sign In (user)
 
 POST {{baseUrl}}/auth/token
 Content-Type: application/json
@@ -6,4 +6,14 @@ Content-Type: application/json
 {
   "username": "test",
   "password": "test"
+}
+
+### Sign In (admin)
+
+POST {{baseUrl}}/auth/token
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "admin"
 }

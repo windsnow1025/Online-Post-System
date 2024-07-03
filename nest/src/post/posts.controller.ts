@@ -8,8 +8,10 @@ import {
   Put,
   Request,
 } from '@nestjs/common';
+import { Roles } from '../common/decorators/roles.decorator';
+import { Role } from '../common/enums/role.enum';
 import { RequestWithUser } from '../auth/interfaces/request-with-user.interface';
-import { Post as PostEntity } from './post.entity';
+import { Post as PostEntity, PostStatus } from './post.entity';
 import { PostsService } from './posts.service';
 
 @Controller('posts')
@@ -34,6 +36,16 @@ export class PostsController {
   async update(@Request() req: RequestWithUser, @Body() post: PostEntity) {
     const userId = req.user.sub;
     const updatedPost = await this.postsService.update(userId, post);
+    return this.postsService.toPostDto(updatedPost);
+  }
+
+  @Put('/post/:id/status')
+  @Roles(Role.Admin)
+  async updateStatus(
+    @Param('id') id: number,
+    @Body('status') status: PostStatus,
+  ) {
+    const updatedPost = await this.postsService.updateStatus(id, status);
     return this.postsService.toPostDto(updatedPost);
   }
 
