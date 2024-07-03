@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from 'axios';
-import { Post } from '@/src/model/Post';
+import {Post, PostStatus} from '@/src/model/Post';
 
 export default class PostService {
   private axiosInstance: AxiosInstance;
@@ -54,5 +54,15 @@ export default class PostService {
     await this.axiosInstance.delete(`/posts/post/${id}`, {
       headers: { Authorization: `Bearer ${token}` }
     });
+  }
+
+  async updatePostStatus(id: number, status: PostStatus): Promise<Post> {
+    const token = localStorage.getItem('token');
+    const res = await this.axiosInstance.put(`/posts/post/${id}/status`, {
+      status
+    }, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    return res.data;
   }
 }
