@@ -51,7 +51,7 @@ function AdminDiv() {
       await postService.updatePostStatus(id, status);
       setSuccess("Post status updated successfully.");
       // Fetch posts again to update the list
-      const fetchedPosts = await postService.fetchPosts();
+      const fetchedPosts = await postService.fetchAllPosts();
       setPosts(fetchedPosts);
     } catch (err) {
       setError("Failed to update post status.");
@@ -76,7 +76,7 @@ function AdminDiv() {
   return (
     <div>
       <Typography variant="h5" component="div" className="m-2">
-        Admin - Manage Posts
+        Manage Posts
       </Typography>
       {fetchingPosts ? (
         <CircularProgress />
