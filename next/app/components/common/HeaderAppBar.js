@@ -40,12 +40,7 @@ const HeaderAppBar = ({
           open={Boolean(anchorEl)}
           onClose={handleMenuClose}
         >
-          <MenuItem component={Link} href="/markdown" onClick={handleMenuClose}>Markdown Blogs</MenuItem>
-          <MenuItem component={Link} href="/bookmark" onClick={handleMenuClose}>Bookmarks</MenuItem>
-          <MenuItem component={Link} href="/message" onClick={handleMenuClose}>Message Transmitter</MenuItem>
-          <MenuItem component={Link} href="/password" onClick={handleMenuClose}>Password Generator</MenuItem>
-          <MenuItem component={Link} href="/image" onClick={handleMenuClose}>Image Generate</MenuItem>
-          <MenuItem component={Link} href="/chat" onClick={handleMenuClose}>AI Chat</MenuItem>
+          <MenuItem component={Link} href="/placeholder" onClick={handleMenuClose}>Placeholder</MenuItem>
         </Menu>
         <Typography variant="h4">
           {title}
