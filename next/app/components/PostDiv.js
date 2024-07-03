@@ -21,7 +21,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty';
 import FileService from "../../src/service/FileService";
 import PostService from "../../src/service/PostService";
-import { PostStatus } from "@/src/model/Post";
+import { PostStatus } from "../../src/model/Post";
 
 function PostDiv() {
   const [title, setTitle] = useState("");

@@ -2,8 +2,7 @@
 
 import React, {useEffect} from "react";
 import {ThemeProvider} from "@mui/material/styles";
-import {CssBaseline, Link} from "@mui/material";
-import GitHubIcon from "@mui/icons-material/GitHub";
+import {CssBaseline} from "@mui/material";
 import useThemeHandler from "../app/hooks/useThemeHandler";
 import HeaderAppBar from "../app/components/common/HeaderAppBar";
 import PostDiv from "../app/components/PostDiv";
