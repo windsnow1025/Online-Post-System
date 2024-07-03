@@ -6,6 +6,7 @@ import {CssBaseline, Link} from "@mui/material";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import useThemeHandler from "../app/hooks/useThemeHandler";
 import HeaderAppBar from "../app/components/common/HeaderAppBar";
+import PostDiv from "../app/components/PostDiv";
 
 function Index() {
   const {systemTheme, setSystemTheme, muiTheme} = useThemeHandler();
@@ -19,11 +20,12 @@ function Index() {
       <CssBaseline enableColorScheme/>
       <div className="local-scroll-root">
         <HeaderAppBar
-          title="Windsnow1025"
+          title="Online Post System"
           systemTheme={systemTheme}
           setSystemTheme={setSystemTheme}
         />
         <div className="local-scroll-scrollable flex-around m-2">
+          <PostDiv/>
         </div>
       </div>
     </ThemeProvider>
