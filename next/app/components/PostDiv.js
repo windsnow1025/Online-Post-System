@@ -16,8 +16,12 @@ import {
 import DeleteIcon from '@mui/icons-material/Delete';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CancelIcon from '@mui/icons-material/Cancel';
+import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty';
 import FileService from "../../src/service/FileService";
 import PostService from "../../src/service/PostService";
+import { PostStatus } from "@/src/model/Post";
 
 function PostDiv() {
   const [title, setTitle] = useState("");
@@ -126,6 +130,18 @@ function PostDiv() {
     }
   };
 
+  const getStatusIcon = (status) => {
+    switch (status) {
+      case PostStatus.APPROVED:
+        return <CheckCircleIcon color="success" />;
+      case PostStatus.REJECTED:
+        return <CancelIcon color="error" />;
+      case PostStatus.PENDING:
+      default:
+        return <HourglassEmptyIcon color="warning" />;
+    }
+  };
+
   return (
     <div>
       <Card variant="outlined" className="m-2">
@@ -191,9 +207,12 @@ function PostDiv() {
                 <Typography variant="h5" component="div">
                   {post.title}
                 </Typography>
-                <IconButton color="secondary" onClick={() => handlePostDelete(post.id)} disabled={loading}>
-                  <DeleteIcon />
-                </IconButton>
+                <Box display="flex" alignItems="center">
+                  {getStatusIcon(post.status)}
+                  <IconButton color="secondary" onClick={() => handlePostDelete(post.id)} disabled={loading}>
+                    <DeleteIcon />
+                  </IconButton>
+                </Box>
               </Box>
               <Typography variant="body2" color="text.secondary">
                 {post.content}
