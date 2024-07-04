@@ -10,7 +10,7 @@ Authorization: Bearer {{token}}
 
 ### Create Post
 
-POST {{baseUrl}}/posts/post
+POST {{baseUrl}}/posts
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
@@ -22,7 +22,7 @@ Content-Type: application/json
 
 ### Update Post
 
-PUT {{baseUrl}}/posts/post
+PUT {{baseUrl}}/posts
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
@@ -35,7 +35,7 @@ Content-Type: application/json
 
 ### Delete Post
 
-DELETE {{baseUrl}}/posts/post/1
+DELETE {{baseUrl}}/posts1
 Authorization: Bearer {{token}}
 
 ### Get Posts (Admin)
@@ -45,7 +45,7 @@ Authorization: Bearer {{token}}
 
 ### Update Post Status (Admin)
 
-PUT {{baseUrl}}/posts/admin/post/1/status
+PUT {{baseUrl}}/posts/admin/1/status
 Authorization: Bearer {{token}}
 Content-Type: application/json
 

@@ -31,21 +31,21 @@ export class PostsController {
     return posts.map((post) => this.postsService.toPostDto(post));
   }
 
-  @Post('/post')
+  @Post('')
   async create(@Request() req: RequestWithUser, @Body() post: PostEntity) {
     const userId = req.user.sub;
     const savedPost = await this.postsService.create(userId, post);
     return this.postsService.toPostDto(savedPost);
   }
 
-  @Put('/post')
+  @Put('')
   async update(@Request() req: RequestWithUser, @Body() post: PostEntity) {
     const userId = req.user.sub;
     const updatedPost = await this.postsService.update(userId, post);
     return this.postsService.toPostDto(updatedPost);
   }
 
-  @Delete('/post/:id')
+  @Delete('/:id')
   async delete(@Request() req: RequestWithUser, @Param('id') id: number) {
     const userId = req.user.sub;
     const deletedPost = await this.postsService.remove(userId, id);
@@ -59,7 +59,7 @@ export class PostsController {
     return posts.map((post) => this.postsService.toPostDto(post));
   }
 
-  @Put('/admin/post/:id/status')
+  @Put('/admin/:id/status')
   @Roles(Role.Admin)
   async updateStatus(
     @Param('id') id: number,

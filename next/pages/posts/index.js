@@ -1,26 +1,23 @@
-'use client';
-
 import React, { useEffect, useState } from "react";
 import { ThemeProvider } from "@mui/material/styles";
 import { CssBaseline, Button, Grid, Typography, CircularProgress, Snackbar, Alert } from "@mui/material";
 import Link from 'next/link';
-import useThemeHandler from "../app/hooks/useThemeHandler";
-import HeaderAppBar from "../app/components/common/HeaderAppBar";
-import PostList from "../app/components/posts/PostList";
-import PostService from "../src/service/PostService";
+import useThemeHandler from "../../app/hooks/useThemeHandler";
+import HeaderAppBar from "../../app/components/common/HeaderAppBar";
+import PostList from "../../app/components/posts/PostList";
+import PostService from "../../src/service/PostService";
 
-function Index() {
+function PostManagement() {
   const { systemTheme, setSystemTheme, muiTheme } = useThemeHandler();
   const [posts, setPosts] = useState([]);
   const [fetchingPosts, setFetchingPosts] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    document.title = "Online Post System";
     const fetchPosts = async () => {
       const postService = new PostService();
       try {
-        const fetchedPosts = await postService.fetchApprovedPosts();
+        const fetchedPosts = await postService.fetchPosts();
         setPosts(fetchedPosts);
       } catch (err) {
         setError("Failed to fetch posts.");
@@ -38,13 +35,13 @@ function Index() {
       <CssBaseline enableColorScheme />
       <div className="local-scroll-root">
         <HeaderAppBar
-          title="Online Post System"
+          title="Post Management"
           systemTheme={systemTheme}
           setSystemTheme={setSystemTheme}
         />
         <div className="local-scroll-scrollable flex-around m-2">
           <Typography variant="h5" component="div" className="m-2">
-            Approved Posts
+            My Posts
           </Typography>
           {fetchingPosts ? (
             <CircularProgress />
@@ -58,9 +55,9 @@ function Index() {
           </Snackbar>
           <Grid container spacing={2} justifyContent="center" className="m-2">
             <Grid item>
-              <Link href="/posts" passHref>
+              <Link href="/posts/new" passHref>
                 <Button variant="contained" color="primary">
-                  Manage My Posts
+                  Create New Post
                 </Button>
               </Link>
             </Grid>
@@ -71,4 +68,4 @@ function Index() {
   );
 }
 
-export default Index;
+export default PostManagement;
