@@ -72,6 +72,13 @@ export class PostsService {
     return post;
   }
 
+  async findApprovedPosts() {
+    return this.postsRepository.find({
+      where: { status: PostStatus.APPROVED },
+      relations: ['user'],
+    });
+  }
+
   async create(userId: number, post: Post) {
     const user = await this.usersService.findOneById(userId);
     if (!user) {

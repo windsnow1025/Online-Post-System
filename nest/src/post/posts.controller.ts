@@ -25,6 +25,12 @@ export class PostsController {
     return posts.map((post) => this.postsService.toPostDto(post));
   }
 
+  @Get('/approved')
+  async findApprovedPosts() {
+    const posts = await this.postsService.findApprovedPosts();
+    return posts.map((post) => this.postsService.toPostDto(post));
+  }
+
   @Post('/post')
   async create(@Request() req: RequestWithUser, @Body() post: PostEntity) {
     const userId = req.user.sub;

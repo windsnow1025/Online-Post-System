@@ -3,6 +3,11 @@
 GET {{baseUrl}}/posts
 Authorization: Bearer {{token}}
 
+### Get Approved Posts
+
+GET {{baseUrl}}/posts/approved
+Authorization: Bearer {{token}}
+
 ### Create Post
 
 POST {{baseUrl}}/posts/post
@@ -28,17 +33,22 @@ Content-Type: application/json
   "url": "https://www.google.com/"
 }
 
-### Update Post Status
+### Delete Post
 
-PUT {{baseUrl}}/posts/post/6/status
+DELETE {{baseUrl}}/posts/post/1
+Authorization: Bearer {{token}}
+
+### Get Posts (Admin)
+
+GET {{baseUrl}}/posts/admin
+Authorization: Bearer {{token}}
+
+### Update Post Status (Admin)
+
+PUT {{baseUrl}}/posts/admin/post/1/status
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
   "status": "approved"
 }
-
-### Delete Post
-
-DELETE {{baseUrl}}/posts/post/1
-Authorization: Bearer {{token}}
