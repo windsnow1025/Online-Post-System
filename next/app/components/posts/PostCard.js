@@ -1,11 +1,14 @@
 import React from "react";
-import { Card, CardContent, Typography, Box } from "@mui/material";
+import { Card, CardContent, Typography, Box, Button, IconButton } from "@mui/material";
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
 import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { PostStatus } from '@/src/model/Post';
+import Link from 'next/link';
+import PostService from '@/src/service/PostService';
 
-function PostCard({ post }) {
+function PostCard({ post, onDelete }) {
   const getStatusIcon = (status) => {
     switch (status) {
       case PostStatus.APPROVED:
@@ -15,6 +18,16 @@ function PostCard({ post }) {
       case PostStatus.PENDING:
       default:
         return <HourglassEmptyIcon color="warning" />;
+    }
+  };
+
+  const handleDelete = async () => {
+    const postService = new PostService();
+    try {
+      await postService.deletePost(post.id);
+      onDelete(post.id);
+    } catch (err) {
+      console.error("Failed to delete post:", err);
     }
   };
 
@@ -37,6 +50,16 @@ function PostCard({ post }) {
             </a>
           </Typography>
         )}
+        <Box mt={2} display="flex" justifyContent="space-between">
+          <Link href={`/posts/${post.id}`} passHref>
+            <Button variant="contained" color="primary">
+              Edit
+            </Button>
+          </Link>
+          <IconButton color="secondary" onClick={handleDelete}>
+            <DeleteIcon />
+          </IconButton>
+        </Box>
       </CardContent>
     </Card>
   );

@@ -66,7 +66,7 @@ export default class PostService {
 
   async fetchAllPosts(): Promise<Post> {
     const token = localStorage.getItem('token');
-    const res = await this.axiosInstance.get(`/posts/admin/`, {
+    const res = await this.axiosInstance.get(`/posts/admin`, {
       headers: { Authorization: `Bearer ${token}` }
     });
     return res.data;

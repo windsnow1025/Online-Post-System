@@ -30,6 +30,10 @@ function PostManagement() {
     fetchPosts();
   }, []);
 
+  const handleDelete = (postId) => {
+    setPosts(posts.filter(post => post.id !== postId));
+  };
+
   return (
     <ThemeProvider theme={muiTheme}>
       <CssBaseline enableColorScheme />
@@ -46,7 +50,7 @@ function PostManagement() {
           {fetchingPosts ? (
             <CircularProgress />
           ) : (
-            <PostList posts={posts} />
+            <PostList posts={posts} onDelete={handleDelete} />
           )}
           <Snackbar open={!!error} autoHideDuration={6000} onClose={() => setError(null)}>
             <Alert onClose={() => setError(null)} severity="error" sx={{ width: '100%' }}>

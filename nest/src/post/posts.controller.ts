@@ -31,13 +31,6 @@ export class PostsController {
     return posts.map((post) => this.postsService.toPostDto(post));
   }
 
-  @Get('/:id')
-  async findOne(@Request() req: RequestWithUser, @Param('id') id: number) {
-    const userId = req.user.sub;
-    const post = await this.postsService.findOne(userId, id);
-    return this.postsService.toPostDto(post);
-  }
-
   @Post('')
   async create(@Request() req: RequestWithUser, @Body() post: PostEntity) {
     const userId = req.user.sub;
@@ -50,13 +43,6 @@ export class PostsController {
     const userId = req.user.sub;
     const updatedPost = await this.postsService.update(userId, post);
     return this.postsService.toPostDto(updatedPost);
-  }
-
-  @Delete('/:id')
-  async delete(@Request() req: RequestWithUser, @Param('id') id: number) {
-    const userId = req.user.sub;
-    const deletedPost = await this.postsService.remove(userId, id);
-    return this.postsService.toPostDto(deletedPost);
   }
 
   @Get('/admin')
@@ -74,5 +60,19 @@ export class PostsController {
   ) {
     const updatedPost = await this.postsService.updateStatus(id, status);
     return this.postsService.toPostDto(updatedPost);
+  }
+
+  @Get('/:id')
+  async findOne(@Request() req: RequestWithUser, @Param('id') id: number) {
+    const userId = req.user.sub;
+    const post = await this.postsService.findOne(userId, id);
+    return this.postsService.toPostDto(post);
+  }
+
+  @Delete('/:id')
+  async delete(@Request() req: RequestWithUser, @Param('id') id: number) {
+    const userId = req.user.sub;
+    const deletedPost = await this.postsService.remove(userId, id);
+    return this.postsService.toPostDto(deletedPost);
   }
 }
