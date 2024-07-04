@@ -3,6 +3,11 @@
 GET {{baseUrl}}/posts
 Authorization: Bearer {{token}}
 
+### Get Post
+
+GET {{baseUrl}}/posts/1
+Authorization: Bearer {{token}}
+
 ### Get Approved Posts
 
 GET {{baseUrl}}/posts/approved
