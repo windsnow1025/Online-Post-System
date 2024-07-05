@@ -72,6 +72,23 @@ export class PostsService {
     return post;
   }
 
+  async findApprovedPost(id: number) {
+    const post = await this.postsRepository.findOne({
+      where: { id },
+      relations: ['user'],
+    });
+
+    if (!post) {
+      throw new NotFoundException('Post not found');
+    }
+
+    if (post.status !== PostStatus.APPROVED) {
+      throw new ForbiddenException();
+    }
+
+    return post;
+  }
+
   async findApprovedPosts() {
     return this.postsRepository.find({
       where: { status: PostStatus.APPROVED },
