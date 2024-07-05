@@ -1,8 +1,4 @@
-import {
-  ForbiddenException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import { Post, PostStatus } from './post.entity';
@@ -65,24 +61,7 @@ export class PostsService {
       throw new NotFoundException('Post not found');
     }
 
-    if (post.user.id !== userId) {
-      throw new ForbiddenException();
-    }
-
-    return post;
-  }
-
-  async findApprovedPost(id: number) {
-    const post = await this.postsRepository.findOne({
-      where: { id },
-      relations: ['user'],
-    });
-
-    if (!post) {
-      throw new NotFoundException('Post not found');
-    }
-
-    if (post.status !== PostStatus.APPROVED) {
+    if (post.user.id !== userId && post.status !== PostStatus.APPROVED) {
       throw new ForbiddenException();
     }
 

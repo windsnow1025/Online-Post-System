@@ -63,8 +63,9 @@ export class PostsController {
   }
 
   @Get('/:id')
-  async findApprovedPost(@Param('id') id: number) {
-    const post = await this.postsService.findApprovedPost(id);
+  async findOne(@Request() req: RequestWithUser, @Param('id') id: number) {
+    const userId = req.user.sub;
+    const post = await this.postsService.findOne(userId, id);
     return this.postsService.toPostDto(post);
   }
 
