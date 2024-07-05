@@ -8,7 +8,7 @@ import { PostStatus } from '@/src/model/Post';
 import Link from 'next/link';
 import PostService from '@/src/service/PostService';
 
-function PostCard({ post, onDelete }) {
+function PostCard({ post, onDelete, showUsername }) {
   const getStatusIcon = (status) => {
     switch (status) {
       case PostStatus.APPROVED:
@@ -50,16 +50,23 @@ function PostCard({ post, onDelete }) {
             </a>
           </Typography>
         )}
-        <Box mt={2} display="flex" justifyContent="space-between">
-          <Link href={`/posts/${post.id}`} passHref>
-            <Button variant="contained" color="primary">
-              Edit
-            </Button>
-          </Link>
-          <IconButton color="secondary" onClick={handleDelete}>
-            <DeleteIcon />
-          </IconButton>
-        </Box>
+        {showUsername && (
+          <Typography variant="body2" color="text.secondary">
+            Posted by: {post.user.username}
+          </Typography>
+        )}
+        {!showUsername && (
+          <Box mt={2} display="flex" justifyContent="space-between">
+            <Link href={`/posts/${post.id}`} passHref>
+              <Button variant="contained" color="primary">
+                Edit
+              </Button>
+            </Link>
+            <IconButton color="secondary" onClick={handleDelete}>
+              <DeleteIcon />
+            </IconButton>
+          </Box>
+        )}
       </CardContent>
     </Card>
   );

@@ -50,7 +50,7 @@ function PostManagement() {
           {fetchingPosts ? (
             <CircularProgress />
           ) : (
-            <PostList posts={posts} onDelete={handleDelete} />
+            <PostList posts={posts} onDelete={handleDelete} showUsername={false} />
           )}
           <Snackbar open={!!error} autoHideDuration={6000} onClose={() => setError(null)}>
             <Alert onClose={() => setError(null)} severity="error" sx={{ width: '100%' }}>

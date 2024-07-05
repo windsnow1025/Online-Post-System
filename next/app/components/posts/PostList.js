@@ -2,12 +2,12 @@ import React from "react";
 import { Grid } from "@mui/material";
 import PostCard from "./PostCard";
 
-function PostList({ posts, onDelete }) {
+function PostList({ posts, onDelete, showUsername }) {
   return (
     <Grid container spacing={2}>
       {posts.map((post) => (
         <Grid item key={post.id} xs={12} sm={6} md={4}>
-          <PostCard post={post} onDelete={onDelete} />
+          <PostCard post={post} onDelete={onDelete} showUsername={showUsername} />
         </Grid>
       ))}
     </Grid>

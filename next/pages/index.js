@@ -2,12 +2,13 @@
 
 import React, { useEffect, useState } from "react";
 import { ThemeProvider } from "@mui/material/styles";
-import { CssBaseline, Button, Grid, Typography, CircularProgress, Snackbar, Alert } from "@mui/material";
-import Link from 'next/link';
+import {CssBaseline, CircularProgress, Snackbar, Alert, Typography, Grid} from "@mui/material";
 import useThemeHandler from "../app/hooks/useThemeHandler";
 import HeaderAppBar from "../app/components/common/HeaderAppBar";
 import PostList from "../app/components/posts/PostList";
 import PostService from "../src/service/PostService";
+import Link from "next/link";
+import Button from "@mui/material/Button";
 
 function Index() {
   const { systemTheme, setSystemTheme, muiTheme } = useThemeHandler();
@@ -49,7 +50,7 @@ function Index() {
           {fetchingPosts ? (
             <CircularProgress />
           ) : (
-            <PostList posts={posts} />
+            <PostList posts={posts} showUsername={true} />
           )}
           <Snackbar open={!!error} autoHideDuration={6000} onClose={() => setError(null)}>
             <Alert onClose={() => setError(null)} severity="error" sx={{ width: '100%' }}>
