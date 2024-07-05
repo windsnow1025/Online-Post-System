@@ -41,6 +41,7 @@ const HeaderAppBar = ({
           onClose={handleMenuClose}
         >
           <MenuItem component={Link} href="/" onClick={handleMenuClose}>Home</MenuItem>
+          <MenuItem component={Link} href="/posts" onClick={handleMenuClose}>Posts</MenuItem>
           <MenuItem component={Link} href="/admin" onClick={handleMenuClose}>Admin</MenuItem>
         </Menu>
         <Typography variant="h4">

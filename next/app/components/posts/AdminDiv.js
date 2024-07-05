@@ -13,8 +13,8 @@ import {
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
 import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty';
-import PostService from "../../src/service/PostService";
-import { PostStatus } from "../../src/model/Post";
+import PostService from "../../../src/service/PostService";
+import { PostStatus } from "../../../src/model/Post";
 
 function AdminDiv() {
   const [posts, setPosts] = useState([]);
@@ -102,6 +102,9 @@ function AdminDiv() {
                   </a>
                 </Typography>
               )}
+              <Typography variant="body2" color="text.secondary">
+                Posted by: {post.user.username}
+              </Typography>
               <Grid container spacing={2} className="mt-2">
                 <Grid item>
                   <Button

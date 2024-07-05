@@ -5,9 +5,9 @@ import {ThemeProvider} from "@mui/material/styles";
 import {CssBaseline} from "@mui/material";
 import useThemeHandler from "../../app/hooks/useThemeHandler";
 import HeaderAppBar from "../../app/components/common/HeaderAppBar";
-import AdminDiv from "../../app/components/AdminDiv";
+import AdminDiv from "../../app/components/posts/AdminDiv";
 
-function Index() {
+function Admin() {
   const {systemTheme, setSystemTheme, muiTheme} = useThemeHandler();
 
   useEffect(() => {
@@ -31,4 +31,4 @@ function Index() {
   );
 }
 
-export default Index;
+export default Admin;
