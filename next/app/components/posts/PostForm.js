@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import { useRouter } from 'next/router';
 import FileService from "../../../src/service/FileService";
 import PostService from "../../../src/service/PostService";
 
@@ -25,6 +26,7 @@ function PostForm({ post }) {
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
+  const router = useRouter();
 
   const handleFileChange = async (event) => {
     const selectedFile = event.target.files[0];
@@ -77,6 +79,7 @@ function PostForm({ post }) {
         setFile(null);
         setFileUrl("");
       }
+      router.push('/posts');
     } catch (err) {
       setError("Failed to submit post.");
       console.error(err);
