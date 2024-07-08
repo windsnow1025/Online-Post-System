@@ -9,7 +9,9 @@ import {
   Grid,
   Snackbar,
   Alert,
-  LinearProgress
+  LinearProgress,
+  FormControlLabel,
+  Checkbox
 } from "@mui/material";
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
@@ -27,8 +29,8 @@ function PostForm({ post }) {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
+  const [compress, setCompress] = useState(false);
   const router = useRouter();
-
 
   const handleFileChange = async (event) => {
     const selectedFile = event.target.files[0];
@@ -46,7 +48,7 @@ function PostForm({ post }) {
     const fileLogic = new FileLogic();
 
     try {
-      const url = await fileLogic.upload(selectedFile, (progressEvent) => {
+      const url = await fileLogic.upload(selectedFile, compress, (progressEvent) => {
         const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
         setUploadProgress(progress);
       });
@@ -126,6 +128,18 @@ function PostForm({ post }) {
                 Select File
                 <input type="file" hidden onChange={handleFileChange} />
               </Button>
+            </Grid>
+            <Grid item>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={compress}
+                    onChange={(e) => setCompress(e.target.checked)}
+                    color="primary"
+                  />
+                }
+                label="Compress before upload"
+              />
             </Grid>
             <Grid item>
               <Button
