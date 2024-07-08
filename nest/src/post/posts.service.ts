@@ -123,7 +123,7 @@ export class PostsService {
     return await this.postsRepository.save(post);
   }
 
-  async markAsRead(userId: number, id: number) {
+  async updateRead(userId: number, id: number) {
     const post = await this.findOne(userId, id);
     if (!post) {
       throw new NotFoundException('Post not found');

@@ -57,6 +57,14 @@ export default class PostService {
     return res.data;
   }
 
+  async updateRead(id: number): Promise<Post> {
+    const token = localStorage.getItem('token');
+    const res = await this.axiosInstance.put(`/posts/${id}/read`, {}, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    return res.data;
+  }
+
   async deletePost(id: number): Promise<void> {
     const token = localStorage.getItem('token');
     await this.axiosInstance.delete(`/posts/${id}`, {
@@ -72,10 +80,10 @@ export default class PostService {
     return res.data;
   }
 
-  async updatePostStatus(id: number, status: PostStatus): Promise<Post> {
+  async updatePostReview(id: number, status: PostStatus, comment: string): Promise<Post> {
     const token = localStorage.getItem('token');
-    const res = await this.axiosInstance.put(`/posts/admin/${id}/status`, {
-      status
+    const res = await this.axiosInstance.put(`/posts/admin/${id}/review`, {
+      status, comment
     }, {
       headers: { Authorization: `Bearer ${token}` }
     });

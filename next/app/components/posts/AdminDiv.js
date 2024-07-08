@@ -48,7 +48,7 @@ function AdminDiv() {
     const postService = new PostService();
 
     try {
-      await postService.updatePostStatus(id, status);
+      await postService.updatePostReview(id, status);
       setSuccess("Post status updated successfully.");
       // Fetch posts again to update the list
       const fetchedPosts = await postService.fetchAllPosts();

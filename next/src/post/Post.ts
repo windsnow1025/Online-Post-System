@@ -12,5 +12,7 @@ export interface Post {
   content: string;
   url: string;
   status: PostStatus;
+  comment: string;
+  isRead: boolean;
   user: User;
 }

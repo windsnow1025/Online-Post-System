@@ -68,9 +68,9 @@ export class PostsController {
   }
 
   @Put('/:id/read')
-  async markAsRead(@Request() req: RequestWithUser, @Param('id') id: number) {
+  async updateRead(@Request() req: RequestWithUser, @Param('id') id: number) {
     const userId = req.user.sub;
-    const updatedPost = await this.postsService.markAsRead(userId, id);
+    const updatedPost = await this.postsService.updateRead(userId, id);
     return this.postsService.toPostDto(updatedPost);
   }
 
