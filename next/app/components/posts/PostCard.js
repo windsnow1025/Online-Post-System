@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Link from 'next/link';
-import { Card, CardContent, Typography, Box, Button, IconButton, Tooltip, TextField, Snackbar, Alert } from "@mui/material";
+import { Card, CardContent, Typography, Box, IconButton, Tooltip, TextField, Snackbar, Alert, Avatar, Divider } from "@mui/material";
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
 import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty';
@@ -17,7 +17,6 @@ function PostCard({ post, onDelete, showUsername }) {
   const [comment, setComment] = useState("");
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
-  const [loading, setLoading] = useState(false);
   const [currentPost, setCurrentPost] = useState(post);
   const [editingCommentId, setEditingCommentId] = useState(null);
   const [userId, setUserId] = useState(null);
@@ -69,7 +68,7 @@ function PostCard({ post, onDelete, showUsername }) {
   const handleCancelLike = async () => {
     const postService = new PostService();
     try {
-      await postService.cancelLike(post.id);
+      await postService.deleteLike(post.id);
       setSuccess("Like canceled successfully.");
       const updatedPost = await postService.fetchPostById(post.id);
       setCurrentPost(updatedPost);
@@ -87,7 +86,7 @@ function PostCard({ post, onDelete, showUsername }) {
 
     const postService = new PostService();
     try {
-      await postService.commentOnPost(post.id, comment);
+      await postService.commentPost(post.id, comment);
       setSuccess("Comment added successfully.");
       setComment("");
       const updatedPost = await postService.fetchPostById(post.id);
@@ -101,7 +100,7 @@ function PostCard({ post, onDelete, showUsername }) {
   const handleReviseComment = async (commentId, newContent) => {
     const postService = new PostService();
     try {
-      await postService.reviseComment(post.id, commentId, newContent);
+      await postService.updateComment(post.id, commentId, newContent);
       setSuccess("Comment revised successfully.");
       const updatedPost = await postService.fetchPostById(post.id);
       setCurrentPost(updatedPost);
@@ -149,29 +148,14 @@ function PostCard({ post, onDelete, showUsername }) {
           </Typography>
         )}
         {showUsername && (
-          <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-            Posted by: {currentPost.user.username}
-          </Typography>
+          <Box display="flex" alignItems="center" sx={{ mt: 1 }}>
+            <Avatar alt={currentPost.user.username} src="/static/images/avatar/1.jpg" />
+            <Typography variant="body2" color="text.secondary" sx={{ ml: 1 }}>
+              {currentPost.user.username}
+            </Typography>
+          </Box>
         )}
-        <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-          Likes: {currentPost.likes}
-        </Typography>
         <Box mt={2} display="flex" alignItems="center">
-          <TextField
-            label="Add a comment"
-            value={comment}
-            onChange={(e) => setComment(e.target.value)}
-            fullWidth
-            margin="normal"
-            sx={{ flexGrow: 1 }}
-          />
-          <Tooltip title="Send Comment">
-            <IconButton color="primary" onClick={handleComment} disabled={loading}>
-              <SendIcon />
-            </IconButton>
-          </Tooltip>
-        </Box>
-        <Box mt={2} display="flex" justifyContent="space-between">
           <Tooltip title="Like">
             <span>
               <IconButton
@@ -194,36 +178,58 @@ function PostCard({ post, onDelete, showUsername }) {
               </IconButton>
             </span>
           </Tooltip>
+          <Typography variant="body2" color="text.secondary" sx={{ ml: 1 }}>
+            {currentPost.likes} Likes
+          </Typography>
           {!showUsername && (
             <>
               <Link href={`/posts/${currentPost.id}`} passHref>
                 <Tooltip title="Edit Post">
-                  <IconButton color="primary">
+                  <IconButton color="primary" sx={{ ml: 1 }}>
                     <EditIcon />
                   </IconButton>
                 </Tooltip>
               </Link>
               <Tooltip title="Delete Post">
-                <IconButton color="secondary" onClick={handleDelete}>
+                <IconButton color="secondary" onClick={handleDelete} sx={{ ml: 1 }}>
                   <DeleteIcon />
                 </IconButton>
               </Tooltip>
             </>
           )}
         </Box>
+        <Divider sx={{ my: 2 }} />
+        <Box display="flex" alignItems="center">
+          <Avatar alt="User Avatar" src="/static/images/avatar/2.jpg" />
+          <TextField
+            label="Add a comment"
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
+            fullWidth
+            margin="normal"
+            sx={{ flexGrow: 1, ml: 2 }}
+          />
+          <Tooltip title="Send Comment">
+            <IconButton color="primary" onClick={handleComment}>
+              <SendIcon />
+            </IconButton>
+          </Tooltip>
+        </Box>
         <Box mt={2}>
           <Typography variant="h6">Comments:</Typography>
           {currentPost.comments.map((comment) => (
             <Box key={comment.id} mt={1} display="flex" alignItems="center">
+              <Avatar alt={comment.user.username} src="/static/images/avatar/3.jpg" />
               {editingCommentId === comment.id ? (
                 <TextField
                   defaultValue={comment.content}
                   onBlur={(e) => handleCommentBlur(comment.id, e.target.value)}
                   fullWidth
                   autoFocus
+                  sx={{ flexGrow: 1, ml: 2 }}
                 />
               ) : (
-                <Typography variant="body2" color="text.secondary" sx={{ flexGrow: 1 }}>
+                <Typography variant="body2" color="text.secondary" sx={{ flexGrow: 1, ml: 2 }}>
                   {comment.user.username}: {comment.content}
                 </Typography>
               )}
@@ -233,7 +239,7 @@ function PostCard({ post, onDelete, showUsername }) {
                     <IconButton
                       color="primary"
                       onClick={() => setEditingCommentId(comment.id)}
-                      sx={{ marginRight: 1 }}
+                      sx={{ ml: 1 }}
                     >
                       <EditIcon />
                     </IconButton>
@@ -242,6 +248,7 @@ function PostCard({ post, onDelete, showUsername }) {
                     <IconButton
                       color="secondary"
                       onClick={() => handleDeleteComment(comment.id)}
+                      sx={{ ml: 1 }}
                     >
                       <DeleteIcon />
                     </IconButton>

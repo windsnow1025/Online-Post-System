@@ -97,7 +97,7 @@ export default class PostService {
     });
   }
 
-  async commentOnPost(id: number, content: string): Promise<Comment> {
+  async commentPost(id: number, content: string): Promise<Comment> {
     const token = localStorage.getItem('token');
     const res = await this.axiosInstance.post(`/posts/${id}/comment`, {
       content
@@ -107,14 +107,14 @@ export default class PostService {
     return res.data;
   }
 
-  async cancelLike(id: number): Promise<void> {
+  async deleteLike(id: number): Promise<void> {
     const token = localStorage.getItem('token');
     await this.axiosInstance.delete(`/posts/${id}/like`, {
       headers: { Authorization: `Bearer ${token}` }
     });
   }
 
-  async reviseComment(postId: number, commentId: number, content: string): Promise<Comment> {
+  async updateComment(postId: number, commentId: number, content: string): Promise<Comment> {
     const token = localStorage.getItem('token');
     const res = await this.axiosInstance.put(`/posts/${postId}/comment/${commentId}`, {
       content
