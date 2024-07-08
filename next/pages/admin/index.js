@@ -5,7 +5,7 @@ import {ThemeProvider} from "@mui/material/styles";
 import {CssBaseline} from "@mui/material";
 import useThemeHandler from "../../app/hooks/useThemeHandler";
 import HeaderAppBar from "../../app/components/common/HeaderAppBar";
-import AdminDiv from "../../app/components/posts/AdminDiv";
+import AdminDiv from "../../app/components/posts/admin/AdminDiv";
 
 function Admin() {
   const {systemTheme, setSystemTheme, muiTheme} = useThemeHandler();
