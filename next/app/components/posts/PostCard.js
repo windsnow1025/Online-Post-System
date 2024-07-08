@@ -7,6 +7,8 @@ import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
+import EditIcon from '@mui/icons-material/Edit';
+import SendIcon from '@mui/icons-material/Send';
 import { PostStatus } from '../../../src/post/Post';
 import PostService from '../../../src/post/PostService';
 import UserLogic from '../../../src/common/user/UserLogic';
@@ -15,6 +17,7 @@ function PostCard({ post, onDelete, showUsername }) {
   const [comment, setComment] = useState("");
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [currentPost, setCurrentPost] = useState(post);
   const [editingCommentId, setEditingCommentId] = useState(null);
   const [userId, setUserId] = useState(null);
@@ -153,45 +156,52 @@ function PostCard({ post, onDelete, showUsername }) {
         <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
           Likes: {currentPost.likes}
         </Typography>
-        <Box mt={2}>
+        <Box mt={2} display="flex" alignItems="center">
           <TextField
             label="Add a comment"
             value={comment}
             onChange={(e) => setComment(e.target.value)}
             fullWidth
             margin="normal"
+            sx={{ flexGrow: 1 }}
           />
-          <Button variant="contained" color="primary" onClick={handleComment}>
-            Comment
-          </Button>
+          <Tooltip title="Send Comment">
+            <IconButton color="primary" onClick={handleComment} disabled={loading}>
+              <SendIcon />
+            </IconButton>
+          </Tooltip>
         </Box>
         <Box mt={2} display="flex" justifyContent="space-between">
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleLike}
-            startIcon={<ThumbUpIcon />}
-            disabled={currentPost.likes > 0}
-            sx={{ marginRight: 1 }}
-          >
-            Like
-          </Button>
-          <Button
-            variant="contained"
-            color="secondary"
-            onClick={handleCancelLike}
-            startIcon={<ThumbDownIcon />}
-            disabled={currentPost.likes === 0}
-            sx={{ marginRight: 1 }}
-          >
-            Cancel Like
-          </Button>
+          <Tooltip title="Like">
+            <span>
+              <IconButton
+                color="primary"
+                onClick={handleLike}
+                disabled={currentPost.likes > 0}
+              >
+                <ThumbUpIcon />
+              </IconButton>
+            </span>
+          </Tooltip>
+          <Tooltip title="Cancel Like">
+            <span>
+              <IconButton
+                color="secondary"
+                onClick={handleCancelLike}
+                disabled={currentPost.likes === 0}
+              >
+                <ThumbDownIcon />
+              </IconButton>
+            </span>
+          </Tooltip>
           {!showUsername && (
             <>
               <Link href={`/posts/${currentPost.id}`} passHref>
-                <Button variant="contained" color="primary" sx={{ marginRight: 1 }}>
-                  Edit
-                </Button>
+                <Tooltip title="Edit Post">
+                  <IconButton color="primary">
+                    <EditIcon />
+                  </IconButton>
+                </Tooltip>
               </Link>
               <Tooltip title="Delete Post">
                 <IconButton color="secondary" onClick={handleDelete}>
@@ -204,7 +214,7 @@ function PostCard({ post, onDelete, showUsername }) {
         <Box mt={2}>
           <Typography variant="h6">Comments:</Typography>
           {currentPost.comments.map((comment) => (
-            <Box key={comment.id} mt={1}>
+            <Box key={comment.id} mt={1} display="flex" alignItems="center">
               {editingCommentId === comment.id ? (
                 <TextField
                   defaultValue={comment.content}
@@ -213,27 +223,29 @@ function PostCard({ post, onDelete, showUsername }) {
                   autoFocus
                 />
               ) : (
-                <Typography variant="body2" color="text.secondary">
+                <Typography variant="body2" color="text.secondary" sx={{ flexGrow: 1 }}>
                   {comment.user.username}: {comment.content}
                 </Typography>
               )}
               {userId === comment.user.id && (
                 <>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() => setEditingCommentId(comment.id)}
-                    sx={{ marginRight: 1 }}
-                  >
-                    Revise Comment
-                  </Button>
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    onClick={() => handleDeleteComment(comment.id)}
-                  >
-                    Delete Comment
-                  </Button>
+                  <Tooltip title="Revise Comment">
+                    <IconButton
+                      color="primary"
+                      onClick={() => setEditingCommentId(comment.id)}
+                      sx={{ marginRight: 1 }}
+                    >
+                      <EditIcon />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="Delete Comment">
+                    <IconButton
+                      color="secondary"
+                      onClick={() => handleDeleteComment(comment.id)}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </Tooltip>
                 </>
               )}
             </Box>
