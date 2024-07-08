@@ -106,4 +106,28 @@ export default class PostService {
     });
     return res.data;
   }
+
+  async cancelLike(id: number): Promise<void> {
+    const token = localStorage.getItem('token');
+    await this.axiosInstance.delete(`/posts/${id}/like`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+  }
+
+  async reviseComment(postId: number, commentId: number, content: string): Promise<Comment> {
+    const token = localStorage.getItem('token');
+    const res = await this.axiosInstance.put(`/posts/${postId}/comment/${commentId}`, {
+      content
+    }, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    return res.data;
+  }
+
+  async deleteComment(postId: number, commentId: number): Promise<void> {
+    const token = localStorage.getItem('token');
+    await this.axiosInstance.delete(`/posts/${postId}/comment/${commentId}`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+  }
 }

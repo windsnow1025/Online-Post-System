@@ -218,4 +218,77 @@ export class PostsService {
       relations: ['user', 'likes', 'likes.user', 'comments', 'comments.user'],
     });
   }
+
+  async deleteLike(userId: number, postId: number) {
+    const user = await this.usersService.findOneById(userId);
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    const like = await this.likesRepository.findOne({
+      where: { user: { id: userId }, post: { id: postId } },
+    });
+
+    if (!like) {
+      throw new NotFoundException('Like not found');
+    }
+
+    await this.likesRepository.remove(like);
+
+    return await this.postsRepository.findOne({
+      where: { id: postId },
+      relations: ['user', 'likes', 'likes.user', 'comments', 'comments.user'],
+    });
+  }
+
+  async updateComment(
+    userId: number,
+    postId: number,
+    commentId: number,
+    content: string,
+  ) {
+    const user = await this.usersService.findOneById(userId);
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    const comment = await this.commentsRepository.findOne({
+      where: { id: commentId, user: { id: userId }, post: { id: postId } },
+    });
+
+    if (!comment) {
+      throw new NotFoundException('Comment not found');
+    }
+
+    comment.content = content;
+
+    await this.commentsRepository.save(comment);
+
+    return await this.postsRepository.findOne({
+      where: { id: postId },
+      relations: ['user', 'likes', 'likes.user', 'comments', 'comments.user'],
+    });
+  }
+
+  async deleteComment(userId: number, postId: number, commentId: number) {
+    const user = await this.usersService.findOneById(userId);
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    const comment = await this.commentsRepository.findOne({
+      where: { id: commentId, user: { id: userId }, post: { id: postId } },
+    });
+
+    if (!comment) {
+      throw new NotFoundException('Comment not found');
+    }
+
+    await this.commentsRepository.remove(comment);
+
+    return await this.postsRepository.findOne({
+      where: { id: postId },
+      relations: ['user', 'likes', 'likes.user', 'comments', 'comments.user'],
+    });
+  }
 }

@@ -6,15 +6,27 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import { PostStatus } from '../../../src/post/Post';
 import PostService from '../../../src/post/PostService';
+import UserLogic from '../../../src/common/user/UserLogic';
 
 function PostCard({ post, onDelete, showUsername }) {
   const [comment, setComment] = useState("");
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
-  const [loading, setLoading] = useState(false);
   const [currentPost, setCurrentPost] = useState(post);
+  const [editingCommentId, setEditingCommentId] = useState(null);
+  const [userId, setUserId] = useState(null);
+
+  useEffect(() => {
+    const fetchUserId = async () => {
+      const userLogic = new UserLogic();
+      const id = await userLogic.fetchId();
+      setUserId(id);
+    };
+    fetchUserId();
+  }, []);
 
   const getStatusIcon = (status) => {
     switch (status) {
@@ -51,6 +63,19 @@ function PostCard({ post, onDelete, showUsername }) {
     }
   };
 
+  const handleCancelLike = async () => {
+    const postService = new PostService();
+    try {
+      await postService.cancelLike(post.id);
+      setSuccess("Like canceled successfully.");
+      const updatedPost = await postService.fetchPostById(post.id);
+      setCurrentPost(updatedPost);
+    } catch (err) {
+      setError("Failed to cancel like.");
+      console.error(err);
+    }
+  };
+
   const handleComment = async () => {
     if (!comment) {
       setError("Comment cannot be empty.");
@@ -68,6 +93,37 @@ function PostCard({ post, onDelete, showUsername }) {
       setError("Failed to add comment.");
       console.error(err);
     }
+  };
+
+  const handleReviseComment = async (commentId, newContent) => {
+    const postService = new PostService();
+    try {
+      await postService.reviseComment(post.id, commentId, newContent);
+      setSuccess("Comment revised successfully.");
+      const updatedPost = await postService.fetchPostById(post.id);
+      setCurrentPost(updatedPost);
+    } catch (err) {
+      setError("Failed to revise comment.");
+      console.error(err);
+    }
+  };
+
+  const handleDeleteComment = async (commentId) => {
+    const postService = new PostService();
+    try {
+      await postService.deleteComment(post.id, commentId);
+      setSuccess("Comment deleted successfully.");
+      const updatedPost = await postService.fetchPostById(post.id);
+      setCurrentPost(updatedPost);
+    } catch (err) {
+      setError("Failed to delete comment.");
+      console.error(err);
+    }
+  };
+
+  const handleCommentBlur = (commentId, newContent) => {
+    setEditingCommentId(null);
+    handleReviseComment(commentId, newContent);
   };
 
   return (
@@ -105,18 +161,35 @@ function PostCard({ post, onDelete, showUsername }) {
             fullWidth
             margin="normal"
           />
-          <Button variant="contained" color="primary" onClick={handleComment} disabled={loading}>
+          <Button variant="contained" color="primary" onClick={handleComment}>
             Comment
           </Button>
         </Box>
         <Box mt={2} display="flex" justifyContent="space-between">
-          <Button variant="contained" color="primary" onClick={handleLike} startIcon={<ThumbUpIcon />}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleLike}
+            startIcon={<ThumbUpIcon />}
+            disabled={currentPost.likes > 0}
+            sx={{ marginRight: 1 }}
+          >
             Like
+          </Button>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={handleCancelLike}
+            startIcon={<ThumbDownIcon />}
+            disabled={currentPost.likes === 0}
+            sx={{ marginRight: 1 }}
+          >
+            Cancel Like
           </Button>
           {!showUsername && (
             <>
               <Link href={`/posts/${currentPost.id}`} passHref>
-                <Button variant="contained" color="primary">
+                <Button variant="contained" color="primary" sx={{ marginRight: 1 }}>
                   Edit
                 </Button>
               </Link>
@@ -132,9 +205,37 @@ function PostCard({ post, onDelete, showUsername }) {
           <Typography variant="h6">Comments:</Typography>
           {currentPost.comments.map((comment) => (
             <Box key={comment.id} mt={1}>
-              <Typography variant="body2" color="text.secondary">
-                {comment.user.username}: {comment.content}
-              </Typography>
+              {editingCommentId === comment.id ? (
+                <TextField
+                  defaultValue={comment.content}
+                  onBlur={(e) => handleCommentBlur(comment.id, e.target.value)}
+                  fullWidth
+                  autoFocus
+                />
+              ) : (
+                <Typography variant="body2" color="text.secondary">
+                  {comment.user.username}: {comment.content}
+                </Typography>
+              )}
+              {userId === comment.user.id && (
+                <>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => setEditingCommentId(comment.id)}
+                    sx={{ marginRight: 1 }}
+                  >
+                    Revise Comment
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    onClick={() => handleDeleteComment(comment.id)}
+                  >
+                    Delete Comment
+                  </Button>
+                </>
+              )}
             </Box>
           ))}
         </Box>

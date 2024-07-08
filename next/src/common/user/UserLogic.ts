@@ -1,12 +1,9 @@
 import UserService from "./UserService";
 import AuthService from "@/src/common/user/AuthService";
-import { useRouter } from 'next/router';
-import {Role} from "@/src/common/user/User";
 
-export class UserLogic {
+export default class UserLogic {
   private authService: AuthService;
   private userService: UserService;
-  private router = useRouter();
 
   constructor() {
     this.authService = new AuthService();
@@ -20,6 +17,19 @@ export class UserLogic {
     } catch (err) {
       console.error(err);
       throw new Error("Failed to fetch usernames.");
+    }
+  }
+
+  async fetchId() {
+    if (!localStorage.getItem('token')) {
+      return null;
+    }
+    try {
+      const user = await this.userService.fetchUser();
+      return user.id;
+    } catch (err) {
+      localStorage.removeItem('token');
+      return null;
     }
   }
 
@@ -58,12 +68,6 @@ export class UserLogic {
     try {
       const token = await this.authService.fetchToken(username, password);
       localStorage.setItem('token', token);
-      const user = await this.userService.fetchUser();
-      if (user.roles.includes(Role.Admin)) {
-        this.router.push('/admin');
-      } else {
-        this.router.push('/');
-      }
     } catch (err: any) {
       if (err.response && err.response.status === 401) {
         throw new Error("Incorrect Username or Password.");

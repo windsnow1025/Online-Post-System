@@ -96,13 +96,52 @@ export class PostsController {
   }
 
   @Post('/:id/comment')
-  async commentOnPost(
+  async commentPost(
     @Request() req: RequestWithUser,
     @Param('id') id: number,
     @Body('content') content: string,
   ) {
     const userId = req.user.sub;
     const post = await this.postsService.commentOnPost(userId, id, content);
+    return this.postsService.toPostDto(post!);
+  }
+
+  @Delete('/:id/like')
+  async deleteLike(@Request() req: RequestWithUser, @Param('id') id: number) {
+    const userId = req.user.sub;
+    const post = await this.postsService.deleteLike(userId, id);
+    return this.postsService.toPostDto(post!);
+  }
+
+  @Put('/:postId/comment/:commentId')
+  async reviseComment(
+    @Request() req: RequestWithUser,
+    @Param('postId') postId: number,
+    @Param('commentId') commentId: number,
+    @Body('content') content: string,
+  ) {
+    const userId = req.user.sub;
+    const post = await this.postsService.updateComment(
+      userId,
+      postId,
+      commentId,
+      content,
+    );
+    return this.postsService.toPostDto(post!);
+  }
+
+  @Delete('/:postId/comment/:commentId')
+  async deleteComment(
+    @Request() req: RequestWithUser,
+    @Param('postId') postId: number,
+    @Param('commentId') commentId: number,
+  ) {
+    const userId = req.user.sub;
+    const post = await this.postsService.deleteComment(
+      userId,
+      postId,
+      commentId,
+    );
     return this.postsService.toPostDto(post!);
   }
 }
