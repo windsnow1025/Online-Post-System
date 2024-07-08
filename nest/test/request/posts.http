@@ -63,3 +63,18 @@ Content-Type: application/json
   "status": "approved",
   "comment": "Post approved"
 }
+
+### Like Post
+
+POST {{baseUrl}}/posts/1/like
+Authorization: Bearer {{token}}
+
+### Comment on Post
+
+POST {{baseUrl}}/posts/1/comment
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "content": "This is a comment"
+}

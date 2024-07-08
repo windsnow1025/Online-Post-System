@@ -18,6 +18,16 @@ Content-Type: application/json
   "password": "test"
 }
 
+### Sign Up Admin
+
+POST {{baseUrl}}/users/user
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "admin"
+}
+
 ### Update User
 
 PUT {{baseUrl}}/users/user
