@@ -38,6 +38,18 @@ export class Post extends BaseEntity {
   })
   status: PostStatus;
 
+  @Column({
+    type: 'text',
+    nullable: true,
+  })
+  comment: string;
+
+  @Column({
+    type: 'boolean',
+    default: false,
+  })
+  isRead: boolean;
+
   @ManyToOne(() => User, (user) => user.posts)
   user: User;
 }

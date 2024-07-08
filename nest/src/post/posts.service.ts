@@ -1,4 +1,8 @@
-import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import { Post, PostStatus } from './post.entity';
@@ -20,6 +24,8 @@ export class PostsService {
       content: post.content,
       url: post.url,
       status: post.status,
+      comment: post.comment,
+      isRead: post.isRead,
       user: this.usersService.toUserDto(post.user),
     };
     return postDto;
@@ -100,7 +106,7 @@ export class PostsService {
     return await this.postsRepository.save(post);
   }
 
-  async updateStatus(id: number, status: PostStatus) {
+  async updateStatus(id: number, status: PostStatus, comment: string) {
     const post = await this.postsRepository.findOne({
       where: { id },
       relations: ['user'],
@@ -111,6 +117,19 @@ export class PostsService {
     }
 
     post.status = status;
+    post.comment = comment;
+    post.isRead = false;
+
+    return await this.postsRepository.save(post);
+  }
+
+  async markAsRead(userId: number, id: number) {
+    const post = await this.findOne(userId, id);
+    if (!post) {
+      throw new NotFoundException('Post not found');
+    }
+
+    post.isRead = true;
 
     return await this.postsRepository.save(post);
   }

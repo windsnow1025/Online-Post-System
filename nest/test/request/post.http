@@ -38,9 +38,14 @@ Content-Type: application/json
   "url": "https://www.google.com/"
 }
 
+### Read Review
+
+PUT {{baseUrl}}/posts/1/read
+Authorization: Bearer {{token}}
+
 ### Delete Post
 
-DELETE {{baseUrl}}/posts1
+DELETE {{baseUrl}}/posts/1
 Authorization: Bearer {{token}}
 
 ### Get Posts (Admin)
@@ -50,10 +55,11 @@ Authorization: Bearer {{token}}
 
 ### Update Post Status (Admin)
 
-PUT {{baseUrl}}/posts/admin/1/status
+PUT {{baseUrl}}/posts/admin/1/review
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-  "status": "approved"
+  "status": "approved",
+  "comment": "Post approved"
 }

@@ -7,5 +7,7 @@ export class PostDto {
   content: string;
   url: string;
   status: PostStatus;
+  comment: string;
+  isRead: boolean;
   user: UserDto;
 }

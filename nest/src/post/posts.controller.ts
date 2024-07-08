@@ -52,13 +52,25 @@ export class PostsController {
     return posts.map((post) => this.postsService.toPostDto(post));
   }
 
-  @Put('/admin/:id/status')
+  @Put('/admin/:id/review')
   @Roles(Role.Admin)
   async updateStatus(
     @Param('id') id: number,
     @Body('status') status: PostStatus,
+    @Body('comment') comment: string,
   ) {
-    const updatedPost = await this.postsService.updateStatus(id, status);
+    const updatedPost = await this.postsService.updateStatus(
+      id,
+      status,
+      comment,
+    );
+    return this.postsService.toPostDto(updatedPost);
+  }
+
+  @Put('/:id/read')
+  async markAsRead(@Request() req: RequestWithUser, @Param('id') id: number) {
+    const userId = req.user.sub;
+    const updatedPost = await this.postsService.markAsRead(userId, id);
     return this.postsService.toPostDto(updatedPost);
   }
 
