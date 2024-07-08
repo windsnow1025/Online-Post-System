@@ -37,7 +37,7 @@ function Action() {
 
   const handleSignIn = async () => {
     try {
-      await userLogic.signIn(username, password)
+      await userLogic.signIn(username, password);
       const prevUrl = localStorage.getItem('prevUrl') || "/";
       router.push(prevUrl);
     } catch (e) {
