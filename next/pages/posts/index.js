@@ -4,7 +4,7 @@ import { CssBaseline, Button, Grid, Typography, CircularProgress, Snackbar, Aler
 import Link from 'next/link';
 import useThemeHandler from "../../app/hooks/useThemeHandler";
 import HeaderAppBar from "../../app/components/common/HeaderAppBar";
-import PostList from "../../app/components/posts/PostList";
+import PersonalPostList from "../../app/components/posts/PersonalPostList";
 import PostService from "../../src/post/PostService";
 
 function PostManagement() {
@@ -50,7 +50,7 @@ function PostManagement() {
           {fetchingPosts ? (
             <CircularProgress />
           ) : (
-            <PostList posts={posts} onDelete={handleDelete} showUsername={false} />
+            <PersonalPostList posts={posts} onDelete={handleDelete} />
           )}
           <Snackbar open={!!error} autoHideDuration={6000} onClose={() => setError(null)}>
             <Alert onClose={() => setError(null)} severity="error" sx={{ width: '100%' }}>

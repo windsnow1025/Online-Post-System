@@ -2,17 +2,17 @@
 
 import React, { useEffect, useState } from "react";
 import { ThemeProvider } from "@mui/material/styles";
-import {CssBaseline, CircularProgress, Snackbar, Alert, Typography, Grid} from "@mui/material";
+import { CssBaseline, CircularProgress, Snackbar, Alert, Typography, Grid, List, ListItem, ListItemText, ListItemAvatar, Avatar, Button } from "@mui/material";
 import useThemeHandler from "../app/hooks/useThemeHandler";
 import HeaderAppBar from "../app/components/common/HeaderAppBar";
-import PostList from "../app/components/posts/PostList";
 import PostService from "../src/post/PostService";
 import Link from "next/link";
-import Button from "@mui/material/Button";
+import PublicPostDiv from "../app/components/posts/PublicPostDiv";
 
 function Index() {
   const { systemTheme, setSystemTheme, muiTheme } = useThemeHandler();
   const [posts, setPosts] = useState([]);
+  const [selectedPost, setSelectedPost] = useState(null);
   const [fetchingPosts, setFetchingPosts] = useState(true);
   const [error, setError] = useState(null);
 
@@ -23,6 +23,9 @@ function Index() {
       try {
         const fetchedPosts = await postService.fetchApprovedPosts();
         setPosts(fetchedPosts);
+        if (fetchedPosts.length > 0) {
+          setSelectedPost(fetchedPosts[0]);
+        }
       } catch (err) {
         setError("Failed to fetch posts.");
         console.error(err);
@@ -34,6 +37,28 @@ function Index() {
     fetchPosts();
   }, []);
 
+  const handlePostClick = (post) => {
+    setSelectedPost(post);
+  };
+
+  const handleDelete = async (postId) => {
+    const postService = new PostService();
+    try {
+      await postService.deletePost(postId);
+      setPosts(posts.filter(post => post.id !== postId));
+      if (selectedPost.id === postId) {
+        setSelectedPost(posts.length > 1 ? posts[0] : null);
+      }
+    } catch (err) {
+      console.error("Failed to delete post:", err);
+    }
+  };
+
+  const handleUpdate = (updatedPost) => {
+    setSelectedPost(updatedPost);
+    setPosts(posts.map(post => post.id === updatedPost.id ? updatedPost : post));
+  };
+
   return (
     <ThemeProvider theme={muiTheme}>
       <CssBaseline enableColorScheme />
@@ -44,14 +69,32 @@ function Index() {
           setSystemTheme={setSystemTheme}
         />
         <div className="local-scroll-scrollable flex-around m-2">
-          <Typography variant="h5" component="div" className="m-2">
-            Approved Posts
-          </Typography>
-          {fetchingPosts ? (
-            <CircularProgress />
-          ) : (
-            <PostList posts={posts} showUsername={true} />
-          )}
+          <Grid container spacing={2}>
+            <Grid item xs={8}>
+              {fetchingPosts ? (
+                <CircularProgress />
+              ) : (
+                selectedPost && (
+                  <PublicPostDiv post={selectedPost} onDelete={handleDelete} onUpdate={handleUpdate} />
+                )
+              )}
+            </Grid>
+            <Grid item xs={4}>
+              <Typography variant="h5" component="div" className="m-2">
+                Approved Posts
+              </Typography>
+              <List>
+                {posts.map((post) => (
+                  <ListItem button key={post.id} onClick={() => handlePostClick(post)}>
+                    <ListItemAvatar>
+                      <Avatar alt={post.user.username} src="/static/images/avatar/1.jpg" />
+                    </ListItemAvatar>
+                    <ListItemText primary={post.title} secondary={post.user.username} />
+                  </ListItem>
+                ))}
+              </List>
+            </Grid>
+          </Grid>
           <Snackbar open={!!error} autoHideDuration={6000} onClose={() => setError(null)}>
             <Alert onClose={() => setError(null)} severity="error" sx={{ width: '100%' }}>
               {error}
