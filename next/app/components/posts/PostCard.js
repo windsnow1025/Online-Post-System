@@ -1,14 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import Link from 'next/link';
-import { Card, CardContent, Typography, Box, Button, IconButton, Tooltip } from "@mui/material";
+import { Card, CardContent, Typography, Box, Button, IconButton, Tooltip, TextField, Snackbar, Alert } from "@mui/material";
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
 import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty';
 import DeleteIcon from '@mui/icons-material/Delete';
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import { PostStatus } from '../../../src/post/Post';
 import PostService from '../../../src/post/PostService';
 
 function PostCard({ post, onDelete, showUsername }) {
+  const [comment, setComment] = useState("");
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
+  const [loading, setLoading] = useState(false);
+
   const getStatusIcon = (status) => {
     switch (status) {
       case PostStatus.APPROVED:
@@ -28,6 +34,34 @@ function PostCard({ post, onDelete, showUsername }) {
       onDelete(post.id);
     } catch (err) {
       console.error("Failed to delete post:", err);
+    }
+  };
+
+  const handleLike = async () => {
+    const postService = new PostService();
+    try {
+      await postService.likePost(post.id);
+      setSuccess("Post liked successfully.");
+    } catch (err) {
+      setError("Failed to like post.");
+      console.error(err);
+    }
+  };
+
+  const handleComment = async () => {
+    if (!comment) {
+      setError("Comment cannot be empty.");
+      return;
+    }
+
+    const postService = new PostService();
+    try {
+      await postService.commentOnPost(post.id, comment);
+      setSuccess("Comment added successfully.");
+      setComment("");
+    } catch (err) {
+      setError("Failed to add comment.");
+      console.error(err);
     }
   };
 
@@ -55,21 +89,61 @@ function PostCard({ post, onDelete, showUsername }) {
             Posted by: {post.user.username}
           </Typography>
         )}
-        {!showUsername && (
-          <Box mt={2} display="flex" justifyContent="space-between">
-            <Link href={`/posts/${post.id}`} passHref>
-              <Button variant="contained" color="primary">
-                Edit
-              </Button>
-            </Link>
-            <Tooltip title="Delete Post">
-              <IconButton color="secondary" onClick={handleDelete}>
-                <DeleteIcon />
-              </IconButton>
-            </Tooltip>
-          </Box>
-        )}
+        <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+          Likes: {post.likes}
+        </Typography>
+        <Box mt={2}>
+          <TextField
+            label="Add a comment"
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
+            fullWidth
+            margin="normal"
+          />
+          <Button variant="contained" color="primary" onClick={handleComment} disabled={loading}>
+            Comment
+          </Button>
+        </Box>
+        <Box mt={2} display="flex" justifyContent="space-between">
+          <Button variant="contained" color="primary" onClick={handleLike} startIcon={<ThumbUpIcon />}>
+            Like
+          </Button>
+          {!showUsername && (
+            <>
+              <Link href={`/posts/${post.id}`} passHref>
+                <Button variant="contained" color="primary">
+                  Edit
+                </Button>
+              </Link>
+              <Tooltip title="Delete Post">
+                <IconButton color="secondary" onClick={handleDelete}>
+                  <DeleteIcon />
+                </IconButton>
+              </Tooltip>
+            </>
+          )}
+        </Box>
+        <Box mt={2}>
+          <Typography variant="h6">Comments:</Typography>
+          {post.comments.map((comment) => (
+            <Box key={comment.id} mt={1}>
+              <Typography variant="body2" color="text.secondary">
+                {comment.user.username}: {comment.content}
+              </Typography>
+            </Box>
+          ))}
+        </Box>
       </CardContent>
+      <Snackbar open={!!error} autoHideDuration={6000} onClose={() => setError(null)}>
+        <Alert onClose={() => setError(null)} severity="error" sx={{ width: '100%' }}>
+          {error}
+        </Alert>
+      </Snackbar>
+      <Snackbar open={!!success} autoHideDuration={6000} onClose={() => setSuccess(null)}>
+        <Alert onClose={() => setSuccess(null)} severity="success" sx={{ width: '100%' }}>
+          {success}
+        </Alert>
+      </Snackbar>
     </Card>
   );
 }

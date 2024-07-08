@@ -59,20 +59,20 @@ export class PostsService {
 
     return this.postsRepository.find({
       where: { id: In(ids) },
-      relations: ['user', 'likes', 'comments'],
+      relations: ['user', 'likes', 'likes.user', 'comments', 'comments.user'],
     });
   }
 
   async findAll() {
     return this.postsRepository.find({
-      relations: ['user', 'likes', 'comments'],
+      relations: ['user', 'likes', 'likes.user', 'comments', 'comments.user'],
     });
   }
 
   async findOne(userId: number, id: number) {
     const post = await this.postsRepository.findOne({
       where: { id },
-      relations: ['user', 'likes', 'comments'],
+      relations: ['user', 'likes', 'likes.user', 'comments', 'comments.user'],
     });
 
     if (!post) {
@@ -89,7 +89,7 @@ export class PostsService {
   async findApprovedPosts() {
     return this.postsRepository.find({
       where: { status: PostStatus.APPROVED },
-      relations: ['user', 'likes', 'comments'],
+      relations: ['user', 'likes', 'likes.user', 'comments', 'comments.user'],
     });
   }
 
@@ -122,7 +122,7 @@ export class PostsService {
   async updateStatus(id: number, status: PostStatus, comment: string) {
     const post = await this.postsRepository.findOne({
       where: { id },
-      relations: ['user', 'likes', 'comments'],
+      relations: ['user', 'likes', 'likes.user', 'comments', 'comments.user'],
     });
 
     if (!post) {
@@ -164,7 +164,7 @@ export class PostsService {
 
     const post = await this.postsRepository.findOne({
       where: { id: postId, status: PostStatus.APPROVED },
-      relations: ['user', 'likes', 'comments'],
+      relations: ['user', 'likes', 'likes.user', 'comments', 'comments.user'],
     });
 
     if (!post) {
@@ -199,7 +199,7 @@ export class PostsService {
 
     const post = await this.postsRepository.findOne({
       where: { id: postId, status: PostStatus.APPROVED },
-      relations: ['user', 'likes', 'comments'],
+      relations: ['user', 'likes', 'likes.user', 'comments', 'comments.user'],
     });
 
     if (!post) {
