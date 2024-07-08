@@ -1,4 +1,4 @@
-import { AppBar, IconButton, Typography, Menu, MenuItem, Tooltip, Badge } from "@mui/material";
+import { AppBar, IconButton, Typography, Menu, MenuItem, Tooltip, Badge, List, ListItem, ListItemText } from "@mui/material";
 import AuthDiv from "./user/AuthDiv";
 import ThemeToggle from "./ThemeToggle";
 import React, { useState, useEffect } from "react";
@@ -17,6 +17,7 @@ const HeaderAppBar = ({
                         infoUrl
                       }) => {
   const [anchorEl, setAnchorEl] = useState(null);
+  const [inboxAnchorEl, setInboxAnchorEl] = useState(null);
   const [unreadPosts, setUnreadPosts] = useState([]);
 
   useEffect(() => {
@@ -40,6 +41,24 @@ const HeaderAppBar = ({
 
   const handleMenuClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleInboxOpen = (event) => {
+    setInboxAnchorEl(event.currentTarget);
+  };
+
+  const handleInboxClose = () => {
+    setInboxAnchorEl(null);
+  };
+
+  const handleMarkAsRead = async (postId) => {
+    const postService = new PostService();
+    try {
+      await postService.updateRead(postId);
+      setUnreadPosts(unreadPosts.filter(post => post.id !== postId));
+    } catch (err) {
+      console.error("Failed to mark post as read:", err);
+    }
   };
 
   return (
@@ -80,12 +99,36 @@ const HeaderAppBar = ({
         )}
         <div className="grow"></div>
         <Tooltip title="Inbox">
-          <IconButton component={Link} href="/inbox" aria-label="inbox">
+          <IconButton aria-label="inbox" onClick={handleInboxOpen}>
             <Badge badgeContent={unreadPosts.length} color="error">
               <MailIcon fontSize="large" className="text-white" />
             </Badge>
           </IconButton>
         </Tooltip>
+        <Menu
+          anchorEl={inboxAnchorEl}
+          open={Boolean(inboxAnchorEl)}
+          onClose={handleInboxClose}
+        >
+          {unreadPosts.length === 0 ? (
+            <MenuItem disabled>No new messages</MenuItem>
+          ) : (
+            <List>
+              {unreadPosts.map((post) => (
+                <ListItem
+                  button
+                  key={post.id}
+                  onClick={() => {
+                    handleMarkAsRead(post.id);
+                    handleInboxClose();
+                  }}
+                >
+                  <ListItemText primary={post.title} secondary={post.comment} />
+                </ListItem>
+              ))}
+            </List>
+          )}
+        </Menu>
         {useAuthDiv &&
           <div className="m-1 mx-2">
             <AuthDiv refreshKey={refreshKey} />
