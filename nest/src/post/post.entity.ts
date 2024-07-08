@@ -46,7 +46,7 @@ export class Post extends BaseEntity {
 
   @Column({
     type: 'boolean',
-    default: false,
+    default: true,
   })
   isRead: boolean;
 

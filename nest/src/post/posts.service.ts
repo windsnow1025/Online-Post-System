@@ -87,7 +87,6 @@ export class PostsService {
       throw new NotFoundException('User not found');
     }
 
-    post.status = PostStatus.PENDING;
     post.user = user;
     return await this.postsRepository.save(post);
   }
