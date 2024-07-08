@@ -10,4 +10,6 @@ export class PostDto {
   comment: string;
   isRead: boolean;
   user: UserDto;
+  likes: number;
+  comments: { id: number; content: string; user: UserDto }[];
 }

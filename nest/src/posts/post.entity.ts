@@ -1,6 +1,8 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany } from 'typeorm';
 import { User } from '../users/user.entity';
 import { BaseEntity } from '../common/entities/base.entity';
+import { Like } from './like.entity';
+import { Comment } from './comment.entity';
 
 export enum PostStatus {
   PENDING = 'pending',
@@ -52,4 +54,10 @@ export class Post extends BaseEntity {
 
   @ManyToOne(() => User, (user) => user.posts)
   user: User;
+
+  @OneToMany(() => Like, (like) => like.post)
+  likes: Like[];
+
+  @OneToMany(() => Comment, (comment) => comment.post)
+  comments: Comment[];
 }

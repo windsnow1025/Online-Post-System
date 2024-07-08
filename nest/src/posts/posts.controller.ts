@@ -87,4 +87,22 @@ export class PostsController {
     const deletedPost = await this.postsService.remove(userId, id);
     return this.postsService.toPostDto(deletedPost);
   }
+
+  @Post('/:id/like')
+  async likePost(@Request() req: RequestWithUser, @Param('id') id: number) {
+    const userId = req.user.sub;
+    await this.postsService.likePost(userId, id);
+    return { message: 'Post liked successfully' };
+  }
+
+  @Post('/:id/comment')
+  async commentOnPost(
+    @Request() req: RequestWithUser,
+    @Param('id') id: number,
+    @Body('content') content: string,
+  ) {
+    const userId = req.user.sub;
+    const comment = await this.postsService.commentOnPost(userId, id, content);
+    return this.postsService.toPostDto(comment.post);
+  }
 }

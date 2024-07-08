@@ -2,6 +2,8 @@ import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { Role } from '../common/enums/role.enum';
 import { BaseEntity } from '../common/entities/base.entity';
 import { Post } from '../posts/post.entity';
+import { Like } from '../posts/like.entity';
+import { Comment } from '../posts/comment.entity';
 
 @Entity()
 export class User extends BaseEntity {
@@ -32,4 +34,10 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Post, (post) => post.user)
   posts: Post[];
+
+  @OneToMany(() => Like, (like) => like.user)
+  likes: Like[];
+
+  @OneToMany(() => Comment, (comment) => comment.user)
+  comments: Comment[];
 }

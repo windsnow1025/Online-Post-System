@@ -14,6 +14,8 @@ import { UsersModule } from './users/users.module';
 import { FilesModule } from './files/files.module';
 import { Post } from './posts/post.entity';
 import { PostsModule } from './posts/post.module';
+import { Like } from './posts/like.entity';
+import { Comment } from './posts/comment.entity';
 
 @Module({
   imports: [
@@ -31,7 +33,7 @@ import { PostsModule } from './posts/post.module';
         username: configService.get<string>('mysql.user'),
         password: configService.get<string>('mysql.password'),
         database: configService.get<string>('mysql.database'),
-        entities: [User, Post],
+        entities: [User, Post, Like, Comment],
         synchronize: true,
       }),
     }),

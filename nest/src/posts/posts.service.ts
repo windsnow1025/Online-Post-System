@@ -8,12 +8,18 @@ import { In, Repository } from 'typeorm';
 import { Post, PostStatus } from './post.entity';
 import { UsersService } from '../users/users.service';
 import { PostDto } from './dto/post.dto';
+import { Like } from './like.entity';
+import { Comment } from './comment.entity';
 
 @Injectable()
 export class PostsService {
   constructor(
     @InjectRepository(Post)
     private postsRepository: Repository<Post>,
+    @InjectRepository(Like)
+    private likesRepository: Repository<Like>,
+    @InjectRepository(Comment)
+    private commentsRepository: Repository<Comment>,
     private usersService: UsersService,
   ) {}
 
@@ -27,6 +33,12 @@ export class PostsService {
       comment: post.comment,
       isRead: post.isRead,
       user: this.usersService.toUserDto(post.user),
+      likes: post.likes.length,
+      comments: post.comments.map((comment) => ({
+        id: comment.id,
+        content: comment.content,
+        user: this.usersService.toUserDto(comment.user),
+      })),
     };
     return postDto;
   }
@@ -140,5 +152,58 @@ export class PostsService {
     }
 
     return await this.postsRepository.remove(post);
+  }
+
+  async likePost(userId: number, postId: number) {
+    const user = await this.usersService.findOneById(userId);
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    const post = await this.postsRepository.findOne({
+      where: { id: postId, status: PostStatus.APPROVED },
+      relations: ['likes'],
+    });
+
+    if (!post) {
+      throw new NotFoundException('Post not found or not approved');
+    }
+
+    const existingLike = await this.likesRepository.findOne({
+      where: { user: { id: userId }, post: { id: postId } },
+    });
+
+    if (existingLike) {
+      throw new ForbiddenException('User has already liked this post');
+    }
+
+    const like = new Like();
+    like.user = user;
+    like.post = post;
+
+    return await this.likesRepository.save(like);
+  }
+
+  async commentOnPost(userId: number, postId: number, content: string) {
+    const user = await this.usersService.findOneById(userId);
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    const post = await this.postsRepository.findOne({
+      where: { id: postId, status: PostStatus.APPROVED },
+      relations: ['comments'],
+    });
+
+    if (!post) {
+      throw new NotFoundException('Post not found or not approved');
+    }
+
+    const comment = new Comment();
+    comment.user = user;
+    comment.post = post;
+    comment.content = content;
+
+    return await this.commentsRepository.save(comment);
   }
 }
