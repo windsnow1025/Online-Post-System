@@ -59,20 +59,20 @@ export class PostsService {
 
     return this.postsRepository.find({
       where: { id: In(ids) },
-      relations: ['user'],
+      relations: ['user', 'likes', 'comments'],
     });
   }
 
   async findAll() {
     return this.postsRepository.find({
-      relations: ['user'],
+      relations: ['user', 'likes', 'comments'],
     });
   }
 
   async findOne(userId: number, id: number) {
     const post = await this.postsRepository.findOne({
       where: { id },
-      relations: ['user'],
+      relations: ['user', 'likes', 'comments'],
     });
 
     if (!post) {
@@ -89,7 +89,7 @@ export class PostsService {
   async findApprovedPosts() {
     return this.postsRepository.find({
       where: { status: PostStatus.APPROVED },
-      relations: ['user'],
+      relations: ['user', 'likes', 'comments'],
     });
   }
 
@@ -100,6 +100,8 @@ export class PostsService {
     }
 
     post.user = user;
+    post.likes = [];
+    post.comments = [];
     return await this.postsRepository.save(post);
   }
 
@@ -120,7 +122,7 @@ export class PostsService {
   async updateStatus(id: number, status: PostStatus, comment: string) {
     const post = await this.postsRepository.findOne({
       where: { id },
-      relations: ['user'],
+      relations: ['user', 'likes', 'comments'],
     });
 
     if (!post) {
