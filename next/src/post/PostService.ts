@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from 'axios';
-import {Post, PostStatus} from '@/src/post/Post';
+import { Post, PostStatus, Comment } from '@/src/post/Post';
 
 export default class PostService {
   private axiosInstance: AxiosInstance;
@@ -72,7 +72,7 @@ export default class PostService {
     });
   }
 
-  async fetchAllPosts(): Promise<Post> {
+  async fetchAllPosts(): Promise<Post[]> {
     const token = localStorage.getItem('token');
     const res = await this.axiosInstance.get(`/posts/admin`, {
       headers: { Authorization: `Bearer ${token}` }
@@ -84,6 +84,23 @@ export default class PostService {
     const token = localStorage.getItem('token');
     const res = await this.axiosInstance.put(`/posts/admin/${id}/review`, {
       status, comment
+    }, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    return res.data;
+  }
+
+  async likePost(id: number): Promise<void> {
+    const token = localStorage.getItem('token');
+    await this.axiosInstance.post(`/posts/${id}/like`, {}, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+  }
+
+  async commentOnPost(id: number, content: string): Promise<Comment> {
+    const token = localStorage.getItem('token');
+    const res = await this.axiosInstance.post(`/posts/${id}/comment`, {
+      content
     }, {
       headers: { Authorization: `Bearer ${token}` }
     });

@@ -6,6 +6,12 @@ export enum PostStatus {
   REJECTED = 'rejected',
 }
 
+export interface Comment {
+  id: number;
+  content: string;
+  user: User;
+}
+
 export interface Post {
   id: number;
   title: string;
@@ -15,4 +21,6 @@ export interface Post {
   comment: string;
   isRead: boolean;
   user: User;
+  likes: number;
+  comments: Comment[];
 }
