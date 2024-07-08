@@ -54,7 +54,7 @@ function AdminPostCard({ post, onStatusUpdate }) {
   };
 
   return (
-    <Card key={post.id} variant="outlined" className="m-2">
+    <Card key={post.id} variant="outlined" className="m-2" sx={{ borderRadius: 2, boxShadow: 3 }}>
       <CardContent>
         <Box display="flex" justifyContent="space-between" alignItems="center">
           <Typography variant="h5" component="div">
@@ -64,17 +64,17 @@ function AdminPostCard({ post, onStatusUpdate }) {
             {getStatusIcon(post.status)}
           </Box>
         </Box>
-        <Typography variant="body2" color="text.secondary">
+        <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
           {post.content}
         </Typography>
         {post.url && (
-          <Typography variant="body2" color="primary">
+          <Typography variant="body2" color="primary" sx={{ mt: 1 }}>
             <a href={post.url} target="_blank" rel="noopener noreferrer">
               View Attachment
             </a>
           </Typography>
         )}
-        <Typography variant="body2" color="text.secondary">
+        <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
           Posted by: {post.user.username}
         </Typography>
         <TextField

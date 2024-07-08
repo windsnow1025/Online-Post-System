@@ -96,7 +96,7 @@ function PostForm({ post }) {
   };
 
   return (
-    <Card variant="outlined" className="m-2">
+    <Card variant="outlined" className="m-2" sx={{ borderRadius: 2, boxShadow: 3 }}>
       <CardContent>
         <Typography variant="h5" component="div">
           {post ? "Edit Post" : "Create a New Post"}

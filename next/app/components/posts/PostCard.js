@@ -1,6 +1,6 @@
 import React from "react";
 import Link from 'next/link';
-import { Card, CardContent, Typography, Box, Button, IconButton } from "@mui/material";
+import { Card, CardContent, Typography, Box, Button, IconButton, Tooltip } from "@mui/material";
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
 import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty';
@@ -32,7 +32,7 @@ function PostCard({ post, onDelete, showUsername }) {
   };
 
   return (
-    <Card variant="outlined" className="m-2">
+    <Card variant="outlined" className="m-2" sx={{ borderRadius: 2, boxShadow: 3 }}>
       <CardContent>
         <Box display="flex" justifyContent="space-between" alignItems="center">
           <Typography variant="h5" component="div">
@@ -40,18 +40,18 @@ function PostCard({ post, onDelete, showUsername }) {
           </Typography>
           {getStatusIcon(post.status)}
         </Box>
-        <Typography variant="body2" color="text.secondary">
+        <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
           {post.content}
         </Typography>
         {post.url && (
-          <Typography variant="body2" color="primary">
+          <Typography variant="body2" color="primary" sx={{ mt: 1 }}>
             <a href={post.url} target="_blank" rel="noopener noreferrer">
               View Attachment
             </a>
           </Typography>
         )}
         {showUsername && (
-          <Typography variant="body2" color="text.secondary">
+          <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
             Posted by: {post.user.username}
           </Typography>
         )}
@@ -62,9 +62,11 @@ function PostCard({ post, onDelete, showUsername }) {
                 Edit
               </Button>
             </Link>
-            <IconButton color="secondary" onClick={handleDelete}>
-              <DeleteIcon />
-            </IconButton>
+            <Tooltip title="Delete Post">
+              <IconButton color="secondary" onClick={handleDelete}>
+                <DeleteIcon />
+              </IconButton>
+            </Tooltip>
           </Box>
         )}
       </CardContent>
