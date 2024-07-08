@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from 'next/link';
 import { Card, CardContent, Typography, Box, Button, IconButton, Tooltip, TextField, Snackbar, Alert } from "@mui/material";
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -14,6 +14,7 @@ function PostCard({ post, onDelete, showUsername }) {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [currentPost, setCurrentPost] = useState(post);
 
   const getStatusIcon = (status) => {
     switch (status) {
@@ -42,6 +43,8 @@ function PostCard({ post, onDelete, showUsername }) {
     try {
       await postService.likePost(post.id);
       setSuccess("Post liked successfully.");
+      const updatedPost = await postService.fetchPostById(post.id);
+      setCurrentPost(updatedPost);
     } catch (err) {
       setError("Failed to like post.");
       console.error(err);
@@ -59,6 +62,8 @@ function PostCard({ post, onDelete, showUsername }) {
       await postService.commentOnPost(post.id, comment);
       setSuccess("Comment added successfully.");
       setComment("");
+      const updatedPost = await postService.fetchPostById(post.id);
+      setCurrentPost(updatedPost);
     } catch (err) {
       setError("Failed to add comment.");
       console.error(err);
@@ -70,27 +75,27 @@ function PostCard({ post, onDelete, showUsername }) {
       <CardContent>
         <Box display="flex" justifyContent="space-between" alignItems="center">
           <Typography variant="h5" component="div">
-            {post.title}
+            {currentPost.title}
           </Typography>
-          {getStatusIcon(post.status)}
+          {getStatusIcon(currentPost.status)}
         </Box>
         <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-          {post.content}
+          {currentPost.content}
         </Typography>
-        {post.url && (
+        {currentPost.url && (
           <Typography variant="body2" color="primary" sx={{ mt: 1 }}>
-            <a href={post.url} target="_blank" rel="noopener noreferrer">
+            <a href={currentPost.url} target="_blank" rel="noopener noreferrer">
               View Attachment
             </a>
           </Typography>
         )}
         {showUsername && (
           <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-            Posted by: {post.user.username}
+            Posted by: {currentPost.user.username}
           </Typography>
         )}
         <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-          Likes: {post.likes}
+          Likes: {currentPost.likes}
         </Typography>
         <Box mt={2}>
           <TextField
@@ -110,7 +115,7 @@ function PostCard({ post, onDelete, showUsername }) {
           </Button>
           {!showUsername && (
             <>
-              <Link href={`/posts/${post.id}`} passHref>
+              <Link href={`/posts/${currentPost.id}`} passHref>
                 <Button variant="contained" color="primary">
                   Edit
                 </Button>
@@ -125,7 +130,7 @@ function PostCard({ post, onDelete, showUsername }) {
         </Box>
         <Box mt={2}>
           <Typography variant="h6">Comments:</Typography>
-          {post.comments.map((comment) => (
+          {currentPost.comments.map((comment) => (
             <Box key={comment.id} mt={1}>
               <Typography variant="body2" color="text.secondary">
                 {comment.user.username}: {comment.content}
