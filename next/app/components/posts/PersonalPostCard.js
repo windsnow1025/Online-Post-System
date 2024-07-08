@@ -36,7 +36,7 @@ function PersonalPostCard({ post, onDelete }) {
     const fileExtension = url.split('.').pop().toLowerCase();
     if (['jpg', 'jpeg', 'png', 'gif'].includes(fileExtension)) {
       return <img src={url} alt="attachment" style={{ maxWidth: '100%', marginTop: '10px' }} />;
-    } else if (['mp4', 'webm', 'ogg'].includes(fileExtension)) {
+    } else if (['mp4', 'mkv', 'webm', 'ogg'].includes(fileExtension)) {
       return <video controls src={url} style={{ maxWidth: '100%', marginTop: '10px' }} />;
     } else if (['mp3', 'wav', 'ogg'].includes(fileExtension)) {
       return <audio controls src={url} style={{ width: '100%', marginTop: '10px' }} />;
