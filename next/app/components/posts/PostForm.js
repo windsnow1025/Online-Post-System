@@ -14,8 +14,8 @@ import {
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { useRouter } from 'next/router';
-import FileService from "../../../src/service/FileService";
-import PostService from "../../../src/service/PostService";
+import FileLogic from "../../../src/common/file/FileLogic";
+import PostService from "../../../src/post/PostService";
 
 function PostForm({ post }) {
   const [title, setTitle] = useState(post ? post.title : "");
@@ -43,10 +43,10 @@ function PostForm({ post }) {
     setError(null);
     setSuccess(null);
 
-    const fileService = new FileService();
+    const fileLogic = new FileLogic();
 
     try {
-      const url = await fileService.upload(selectedFile, (progressEvent) => {
+      const url = await fileLogic.upload(selectedFile, (progressEvent) => {
         const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
         setUploadProgress(progress);
       });

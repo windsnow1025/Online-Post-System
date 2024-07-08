@@ -6,7 +6,7 @@ import {CssBaseline, CircularProgress, Snackbar, Alert, Typography, Grid} from "
 import useThemeHandler from "../app/hooks/useThemeHandler";
 import HeaderAppBar from "../app/components/common/HeaderAppBar";
 import PostList from "../app/components/posts/PostList";
-import PostService from "../src/service/PostService";
+import PostService from "../src/post/PostService";
 import Link from "next/link";
 import Button from "@mui/material/Button";
 

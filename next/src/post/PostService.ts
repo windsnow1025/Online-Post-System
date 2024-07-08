@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from 'axios';
-import {Post, PostStatus} from '@/src/model/Post';
+import {Post, PostStatus} from '@/src/post/Post';
 
 export default class PostService {
   private axiosInstance: AxiosInstance;

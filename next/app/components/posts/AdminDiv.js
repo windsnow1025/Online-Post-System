@@ -13,8 +13,8 @@ import {
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
 import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty';
-import PostService from "../../../src/service/PostService";
-import { PostStatus } from "../../../src/model/Post";
+import PostService from "../../../src/post/PostService";
+import { PostStatus } from "../../../src/post/Post";
 
 function AdminDiv() {
   const [posts, setPosts] = useState([]);

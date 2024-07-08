@@ -1,5 +1,5 @@
-import UserService from "../service/UserService";
-import AuthService from "@/src/service/AuthService";
+import UserService from "./UserService";
+import AuthService from "@/src/common/user/AuthService";
 
 export class UserLogic {
   private authService: AuthService;

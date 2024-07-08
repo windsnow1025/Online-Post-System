@@ -1,12 +1,12 @@
 import React from "react";
+import Link from 'next/link';
 import { Card, CardContent, Typography, Box, Button, IconButton } from "@mui/material";
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
 import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { PostStatus } from '@/src/model/Post';
-import Link from 'next/link';
-import PostService from '@/src/service/PostService';
+import { PostStatus } from '../../../src/post/Post';
+import PostService from '../../../src/post/PostService';
 
 function PostCard({ post, onDelete, showUsername }) {
   const getStatusIcon = (status) => {

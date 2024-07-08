@@ -1,4 +1,4 @@
-import { User } from './User';
+import { User } from '../common/user/User';
 
 export enum PostStatus {
   PENDING = 'pending',

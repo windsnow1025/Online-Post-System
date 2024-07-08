@@ -5,7 +5,7 @@ import { CssBaseline, CircularProgress, Snackbar, Alert } from "@mui/material";
 import useThemeHandler from "../../app/hooks/useThemeHandler";
 import HeaderAppBar from "../../app/components/common/HeaderAppBar";
 import PostForm from "../../app/components/posts/PostForm";
-import PostService from "../../src/service/PostService";
+import PostService from "../../src/post/PostService";
 
 function EditPost() {
   const { systemTheme, setSystemTheme, muiTheme } = useThemeHandler();
