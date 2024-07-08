@@ -91,8 +91,8 @@ export class PostsController {
   @Post('/:id/like')
   async likePost(@Request() req: RequestWithUser, @Param('id') id: number) {
     const userId = req.user.sub;
-    await this.postsService.likePost(userId, id);
-    return { message: 'Post liked successfully' };
+    const post = await this.postsService.likePost(userId, id);
+    return this.postsService.toPostDto(post!);
   }
 
   @Post('/:id/comment')
@@ -102,7 +102,7 @@ export class PostsController {
     @Body('content') content: string,
   ) {
     const userId = req.user.sub;
-    const comment = await this.postsService.commentOnPost(userId, id, content);
-    return this.postsService.toPostDto(comment.post);
+    const post = await this.postsService.commentOnPost(userId, id, content);
+    return this.postsService.toPostDto(post!);
   }
 }

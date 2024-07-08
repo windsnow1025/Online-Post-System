@@ -164,7 +164,7 @@ export class PostsService {
 
     const post = await this.postsRepository.findOne({
       where: { id: postId, status: PostStatus.APPROVED },
-      relations: ['likes'],
+      relations: ['user', 'likes', 'comments'],
     });
 
     if (!post) {
@@ -183,7 +183,12 @@ export class PostsService {
     like.user = user;
     like.post = post;
 
-    return await this.likesRepository.save(like);
+    await this.likesRepository.save(like);
+
+    return await this.postsRepository.findOne({
+      where: { id: postId },
+      relations: ['user', 'likes', 'likes.user', 'comments', 'comments.user'],
+    });
   }
 
   async commentOnPost(userId: number, postId: number, content: string) {
@@ -194,7 +199,7 @@ export class PostsService {
 
     const post = await this.postsRepository.findOne({
       where: { id: postId, status: PostStatus.APPROVED },
-      relations: ['comments'],
+      relations: ['user', 'likes', 'comments'],
     });
 
     if (!post) {
@@ -206,6 +211,11 @@ export class PostsService {
     comment.post = post;
     comment.content = content;
 
-    return await this.commentsRepository.save(comment);
+    await this.commentsRepository.save(comment);
+
+    return await this.postsRepository.findOne({
+      where: { id: postId },
+      relations: ['user', 'likes', 'likes.user', 'comments', 'comments.user'],
+    });
   }
 }
