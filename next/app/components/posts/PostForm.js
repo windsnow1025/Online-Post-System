@@ -24,9 +24,11 @@ function PostForm({ post }) {
   const [fileUrl, setFileUrl] = useState(post ? post.url : "");
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const router = useRouter();
+
 
   const handleFileChange = async (event) => {
     const selectedFile = event.target.files[0];
@@ -44,7 +46,10 @@ function PostForm({ post }) {
     const fileService = new FileService();
 
     try {
-      const url = await fileService.upload(selectedFile);
+      const url = await fileService.upload(selectedFile, (progressEvent) => {
+        const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+        setUploadProgress(progress);
+      });
       setFileUrl(url);
       setSuccess("File uploaded successfully.");
     } catch (err) {
@@ -136,7 +141,7 @@ function PostForm({ post }) {
           </Grid>
           <Grid item xs={12}>
             {file && <Typography variant="body2" color="text.secondary" ml={2}>{file.name}</Typography>}
-            {uploading && <LinearProgress />}
+            {uploading && <LinearProgress variant="determinate" value={uploadProgress} />}
           </Grid>
         </Grid>
         {loading && <CircularProgress />}
