@@ -117,6 +117,25 @@ function PublicPostDiv({ post, onDelete, onUpdate }) {
     handleReviseComment(commentId, newContent);
   };
 
+  const renderMedia = (url) => {
+    const fileExtension = url.split('.').pop().toLowerCase();
+    if (['jpg', 'jpeg', 'png', 'gif'].includes(fileExtension)) {
+      return <img src={url} alt="attachment" style={{ maxWidth: '100%', marginTop: '10px' }} />;
+    } else if (['mp4', 'webm', 'ogg'].includes(fileExtension)) {
+      return <video controls src={url} style={{ maxWidth: '100%', marginTop: '10px' }} />;
+    } else if (['mp3', 'wav', 'ogg'].includes(fileExtension)) {
+      return <audio controls src={url} style={{ width: '100%', marginTop: '10px' }} />;
+    } else {
+      return (
+        <Typography variant="body2" color="primary" className="m-2">
+          <a href={url} target="_blank" rel="noopener noreferrer">
+            View Attachment
+          </a>
+        </Typography>
+      );
+    }
+  };
+
   return (
     <Box>
       <Typography variant="h4" component="div" className="m-2">
@@ -131,13 +150,7 @@ function PublicPostDiv({ post, onDelete, onUpdate }) {
       <Typography variant="body1" color="text.secondary" className="m-2">
         {post.content}
       </Typography>
-      {post.url && (
-        <Typography variant="body2" color="primary" className="m-2">
-          <a href={post.url} target="_blank" rel="noopener noreferrer">
-            View Attachment
-          </a>
-        </Typography>
-      )}
+      {post.url && renderMedia(post.url)}
       <Box mt={2} display="flex" alignItems="center">
         <Tooltip title="Like">
           <span>

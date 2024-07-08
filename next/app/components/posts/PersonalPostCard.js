@@ -1,6 +1,6 @@
 import React from "react";
 import Link from 'next/link';
-import { Card, CardContent, Typography, Box, IconButton, Tooltip, Avatar, Divider } from "@mui/material";
+import { Card, CardContent, Typography, Box, IconButton, Tooltip, Divider } from "@mui/material";
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
 import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty';
@@ -32,6 +32,25 @@ function PersonalPostCard({ post, onDelete }) {
     }
   };
 
+  const renderMedia = (url) => {
+    const fileExtension = url.split('.').pop().toLowerCase();
+    if (['jpg', 'jpeg', 'png', 'gif'].includes(fileExtension)) {
+      return <img src={url} alt="attachment" style={{ maxWidth: '100%', marginTop: '10px' }} />;
+    } else if (['mp4', 'webm', 'ogg'].includes(fileExtension)) {
+      return <video controls src={url} style={{ maxWidth: '100%', marginTop: '10px' }} />;
+    } else if (['mp3', 'wav', 'ogg'].includes(fileExtension)) {
+      return <audio controls src={url} style={{ width: '100%', marginTop: '10px' }} />;
+    } else {
+      return (
+        <Typography variant="body2" color="primary" sx={{ mt: 1 }}>
+          <a href={url} target="_blank" rel="noopener noreferrer">
+            View Attachment
+          </a>
+        </Typography>
+      );
+    }
+  };
+
   return (
     <Card variant="outlined" className="m-2" sx={{ borderRadius: 2, boxShadow: 3 }}>
       <CardContent>
@@ -44,13 +63,7 @@ function PersonalPostCard({ post, onDelete }) {
         <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
           {post.content}
         </Typography>
-        {post.url && (
-          <Typography variant="body2" color="primary" sx={{ mt: 1 }}>
-            <a href={post.url} target="_blank" rel="noopener noreferrer">
-              View Attachment
-            </a>
-          </Typography>
-        )}
+        {post.url && renderMedia(post.url)}
         <Box mt={2} display="flex" alignItems="center">
           <Link href={`/posts/${post.id}`} passHref>
             <Tooltip title="Edit Post">

@@ -53,6 +53,25 @@ function AdminPostCard({ post, onStatusUpdate }) {
     }
   };
 
+  const renderMedia = (url) => {
+    const fileExtension = url.split('.').pop().toLowerCase();
+    if (['jpg', 'jpeg', 'png', 'gif'].includes(fileExtension)) {
+      return <img src={url} alt="attachment" style={{ maxWidth: '100%', marginTop: '10px' }} />;
+    } else if (['mp4', 'webm', 'ogg'].includes(fileExtension)) {
+      return <video controls src={url} style={{ maxWidth: '100%', marginTop: '10px' }} />;
+    } else if (['mp3', 'wav', 'ogg'].includes(fileExtension)) {
+      return <audio controls src={url} style={{ width: '100%', marginTop: '10px' }} />;
+    } else {
+      return (
+        <Typography variant="body2" color="primary" sx={{ mt: 1 }}>
+          <a href={url} target="_blank" rel="noopener noreferrer">
+            View Attachment
+          </a>
+        </Typography>
+      );
+    }
+  };
+
   return (
     <Card key={post.id} variant="outlined" className="m-2" sx={{ borderRadius: 2, boxShadow: 3 }}>
       <CardContent>
@@ -67,13 +86,7 @@ function AdminPostCard({ post, onStatusUpdate }) {
         <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
           {post.content}
         </Typography>
-        {post.url && (
-          <Typography variant="body2" color="primary" sx={{ mt: 1 }}>
-            <a href={post.url} target="_blank" rel="noopener noreferrer">
-              View Attachment
-            </a>
-          </Typography>
-        )}
+        {post.url && renderMedia(post.url)}
         <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
           Posted by: {post.user.username}
         </Typography>
