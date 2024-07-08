@@ -1,15 +1,16 @@
-import React, {useEffect, useState} from 'react';
-import {useRouter} from "next/router";
+import React, { useEffect, useState } from 'react';
+import { useRouter } from "next/router";
 import UserLogic from "../../../src/common/user/UserLogic";
-import {ThemeProvider} from "@mui/material/styles";
-import {Button, CssBaseline} from "@mui/material";
+import { ThemeProvider } from "@mui/material/styles";
+import { Button, CssBaseline } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import Snackbar from "@mui/material/Snackbar";
 import HeaderAppBar from "../../../app/components/common/HeaderAppBar";
 import useThemeHandler from "../../../app/hooks/useThemeHandler";
+import { Role } from "../../../src/common/user/User";
 
 function Action() {
-  const {systemTheme, setSystemTheme, muiTheme} = useThemeHandler();
+  const { systemTheme, setSystemTheme, muiTheme } = useThemeHandler();
 
   const [action, setAction] = useState('');
   const [title, setTitle] = useState('');
@@ -39,7 +40,12 @@ function Action() {
     try {
       await userLogic.signIn(username, password);
       const prevUrl = localStorage.getItem('prevUrl') || "/";
-      router.push(prevUrl);
+      const roles = await userLogic.fetchRoles();
+      if (roles.includes(Role.Admin)) {
+        router.push('/admin');
+      } else {
+        router.push('/');
+      }
     } catch (e) {
       setAlertMessage(e.message);
       setAlertOpen(true);
@@ -72,7 +78,7 @@ function Action() {
 
   return (
     <ThemeProvider theme={muiTheme}>
-      <CssBaseline enableColorScheme/>
+      <CssBaseline enableColorScheme />
       <div className="local-scroll-root">
         <HeaderAppBar
           title={title}

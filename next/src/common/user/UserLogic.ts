@@ -46,6 +46,19 @@ export default class UserLogic {
     }
   }
 
+  async fetchRoles() {
+    if (!localStorage.getItem('token')) {
+      return null;
+    }
+    try {
+      const user = await this.userService.fetchUser();
+      return user.roles;
+    } catch (err) {
+      localStorage.removeItem('token');
+      return null;
+    }
+  }
+
   async fetchCredit() {
     try {
       const user = await this.userService.fetchUser();
