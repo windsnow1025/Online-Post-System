@@ -74,51 +74,53 @@ function Index() {
           setSystemTheme={setSystemTheme}
         />
         <div className="local-scroll-scrollable flex-around m-2">
-          <Grid container spacing={2}>
-            <Grid item xs={8}>
-              {fetchingPosts ? (
-                <CircularProgress />
-              ) : (
-                selectedPost && (
-                  <PublicPostDiv post={selectedPost} onUpdate={handleUpdate} />
-                )
-              )}
+          <div>
+            <Grid container spacing={2}>
+              <Grid item xs={8}>
+                {fetchingPosts ? (
+                  <CircularProgress />
+                ) : (
+                  selectedPost && (
+                    <PublicPostDiv post={selectedPost} onUpdate={handleUpdate} />
+                  )
+                )}
+              </Grid>
+              <Grid item xs={4}>
+                <Typography variant="h5" component="div" className="m-2">
+                  Approved Posts
+                </Typography>
+                <List>
+                  {posts.map((post) => (
+                    <ListItem
+                      key={post.id}
+                      onClick={() => handlePostClick(post)}
+                    >
+                      <ListItemButton>
+                        <ListItemAvatar>
+                          <Avatar>{getInitials(post.user.username)}</Avatar>
+                        </ListItemAvatar>
+                        <ListItemText primary={post.title} secondary={post.user.username} />
+                      </ListItemButton>
+                    </ListItem>
+                  ))}
+                </List>
+              </Grid>
             </Grid>
-            <Grid item xs={4}>
-              <Typography variant="h5" component="div" className="m-2">
-                Approved Posts
-              </Typography>
-              <List>
-                {posts.map((post) => (
-                  <ListItem
-                    key={post.id}
-                    onClick={() => handlePostClick(post)}
-                  >
-                    <ListItemButton>
-                      <ListItemAvatar>
-                        <Avatar>{getInitials(post.user.username)}</Avatar>
-                      </ListItemAvatar>
-                      <ListItemText primary={post.title} secondary={post.user.username} />
-                    </ListItemButton>
-                  </ListItem>
-                ))}
-              </List>
+            <Grid container spacing={2} justifyContent="center" className="m-2">
+              <Grid item>
+                <Link href="/posts" passHref>
+                  <Button variant="contained" color="primary">
+                    Manage My Posts
+                  </Button>
+                </Link>
+              </Grid>
             </Grid>
-          </Grid>
+          </div>
           <Snackbar open={!!error} autoHideDuration={6000} onClose={() => setError(null)}>
             <Alert onClose={() => setError(null)} severity="error" sx={{ width: '100%' }}>
               {error}
             </Alert>
           </Snackbar>
-          <Grid container spacing={2} justifyContent="center" className="m-2">
-            <Grid item>
-              <Link href="/posts" passHref>
-                <Button variant="contained" color="primary">
-                  Manage My Posts
-                </Button>
-              </Link>
-            </Grid>
-          </Grid>
         </div>
       </div>
     </ThemeProvider>
