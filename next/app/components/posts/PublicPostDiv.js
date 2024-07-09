@@ -62,7 +62,7 @@ function PublicPostDiv({ post, onUpdate }) {
       await postService.commentPost(post.id, comment);
       setSuccess("Comment added successfully.");
       setComment("");
-      const updatedPost = await postService.fetchPostById(post.id);
+      const updatedPost = await postService.fetchApprovedPostById(post.id);
       onUpdate(updatedPost);
     } catch (err) {
       setError("Failed to add comment.");
@@ -75,7 +75,7 @@ function PublicPostDiv({ post, onUpdate }) {
     try {
       await postService.updateComment(post.id, commentId, newContent);
       setSuccess("Comment revised successfully.");
-      const updatedPost = await postService.fetchPostById(post.id);
+      const updatedPost = await postService.fetchApprovedPostById(post.id);
       onUpdate(updatedPost);
     } catch (err) {
       setError("Failed to revise comment.");
@@ -88,7 +88,7 @@ function PublicPostDiv({ post, onUpdate }) {
     try {
       await postService.deleteComment(post.id, commentId);
       setSuccess("Comment deleted successfully.");
-      const updatedPost = await postService.fetchPostById(post.id);
+      const updatedPost = await postService.fetchApprovedPostById(post.id);
       onUpdate(updatedPost);
     } catch (err) {
       setError("Failed to delete comment.");
