@@ -46,6 +46,10 @@ function Index() {
     setPosts(posts.map(post => post.id === updatedPost.id ? updatedPost : post));
   };
 
+  const getInitials = (name) => {
+    return name ? name.charAt(0).toUpperCase() : '';
+  };
+
   return (
     <ThemeProvider theme={muiTheme}>
       <CssBaseline enableColorScheme />
@@ -74,7 +78,7 @@ function Index() {
                 {posts.map((post) => (
                   <ListItem button key={post.id} onClick={() => handlePostClick(post)}>
                     <ListItemAvatar>
-                      <Avatar alt={post.user.username} src="/static/images/avatar/1.jpg" />
+                      <Avatar>{getInitials(post.user.username)}</Avatar>
                     </ListItemAvatar>
                     <ListItemText primary={post.title} secondary={post.user.username} />
                   </ListItem>

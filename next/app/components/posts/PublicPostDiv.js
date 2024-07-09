@@ -13,13 +13,16 @@ function PublicPostDiv({ post, onUpdate }) {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const [editingCommentId, setEditingCommentId] = useState(null);
+  const [username, setUsername] = useState(null);
   const [userId, setUserId] = useState(null);
 
   useEffect(() => {
     const fetchUserId = async () => {
       const userLogic = new UserLogic();
       const id = await userLogic.fetchId();
+      const username = await userLogic.fetchUsername();
       setUserId(id);
+      setUsername(username);
     };
     fetchUserId();
   }, []);
@@ -120,13 +123,17 @@ function PublicPostDiv({ post, onUpdate }) {
     }
   };
 
+  const getInitials = (name) => {
+    return name ? name.charAt(0).toUpperCase() : '';
+  };
+
   return (
     <Box>
       <Typography variant="h4" component="div" className="m-2">
         {post.title}
       </Typography>
       <Box display="flex" alignItems="center" className="m-2">
-        <Avatar alt={post.user.username} src="/static/images/avatar/1.jpg" />
+        <Avatar>{getInitials(post.user.username)}</Avatar>
         <Typography variant="body2" color="text.secondary" sx={{ ml: 1 }}>
           {post.user.username}
         </Typography>
@@ -164,7 +171,7 @@ function PublicPostDiv({ post, onUpdate }) {
       </Box>
       <Divider className="m-2" />
       <Box display="flex" alignItems="center">
-        <Avatar alt="User Avatar" src="/static/images/avatar/2.jpg" />
+        <Avatar>{getInitials(username)}</Avatar>
         <TextField
           label="Add a comment"
           value={comment}
@@ -183,7 +190,7 @@ function PublicPostDiv({ post, onUpdate }) {
         <Typography variant="h6">Comments:</Typography>
         {post.comments.map((comment) => (
           <Box key={comment.id} mt={1} display="flex" alignItems="center">
-            <Avatar alt={comment.user.username} src="/static/images/avatar/3.jpg" />
+            <Avatar>{getInitials(comment.user.username)}</Avatar>
             {editingCommentId === comment.id ? (
               <TextField
                 defaultValue={comment.content}
