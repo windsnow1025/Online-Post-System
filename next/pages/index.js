@@ -73,8 +73,8 @@ function Index() {
           systemTheme={systemTheme}
           setSystemTheme={setSystemTheme}
         />
-        <div className="local-scroll-scrollable flex-around m-2">
-          <div>
+        <div className="local-scroll-scrollable flex m-2">
+          <div className="grow">
             <Grid container spacing={2}>
               <Grid item xs={8}>
                 {fetchingPosts ? (
