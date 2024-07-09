@@ -5,11 +5,10 @@ import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import EditIcon from '@mui/icons-material/Edit';
 import SendIcon from '@mui/icons-material/Send';
-import Link from 'next/link';
 import PostService from '../../../src/post/PostService';
 import UserLogic from '../../../src/common/user/UserLogic';
 
-function PublicPostDiv({ post, onDelete, onUpdate }) {
+function PublicPostDiv({ post, onUpdate }) {
   const [comment, setComment] = useState("");
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
@@ -30,7 +29,8 @@ function PublicPostDiv({ post, onDelete, onUpdate }) {
     try {
       await postService.likePost(post.id);
       setSuccess("Post liked successfully.");
-      const updatedPost = await postService.fetchPostById(post.id);
+      const updatedPost = await postService.fetchApprovedPostById(post.id);
+      console.log(updatedPost);
       onUpdate(updatedPost);
     } catch (err) {
       setError("Failed to like post.");
@@ -43,7 +43,7 @@ function PublicPostDiv({ post, onDelete, onUpdate }) {
     try {
       await postService.deleteLike(post.id);
       setSuccess("Like canceled successfully.");
-      const updatedPost = await postService.fetchPostById(post.id);
+      const updatedPost = await postService.fetchApprovedPostById(post.id);
       onUpdate(updatedPost);
     } catch (err) {
       setError("Failed to cancel like.");
@@ -161,18 +161,6 @@ function PublicPostDiv({ post, onDelete, onUpdate }) {
         <Typography variant="body2" color="text.secondary" sx={{ ml: 1 }}>
           {post.likes} Likes
         </Typography>
-        <Link href={`/posts/${post.id}`} passHref>
-          <Tooltip title="Edit Post">
-            <IconButton color="primary" sx={{ ml: 1 }}>
-              <EditIcon />
-            </IconButton>
-          </Tooltip>
-        </Link>
-        <Tooltip title="Delete Post">
-          <IconButton color="secondary" onClick={() => onDelete(post.id)} sx={{ ml: 1 }}>
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
       </Box>
       <Divider className="m-2" />
       <Box display="flex" alignItems="center">

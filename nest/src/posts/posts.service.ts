@@ -79,7 +79,24 @@ export class PostsService {
       throw new NotFoundException('Post not found');
     }
 
-    if (post.user.id !== userId && post.status !== PostStatus.APPROVED) {
+    if (post.user.id !== userId) {
+      throw new ForbiddenException();
+    }
+
+    return post;
+  }
+
+  async findApprovedOne(id: number) {
+    const post = await this.postsRepository.findOne({
+      where: { id },
+      relations: ['user', 'likes', 'likes.user', 'comments', 'comments.user'],
+    });
+
+    if (!post) {
+      throw new NotFoundException('Post not found');
+    }
+
+    if (post.status !== PostStatus.APPROVED) {
       throw new ForbiddenException();
     }
 
@@ -162,14 +179,7 @@ export class PostsService {
       throw new NotFoundException('User not found');
     }
 
-    const post = await this.postsRepository.findOne({
-      where: { id: postId, status: PostStatus.APPROVED },
-      relations: ['user', 'likes', 'likes.user', 'comments', 'comments.user'],
-    });
-
-    if (!post) {
-      throw new NotFoundException('Post not found or not approved');
-    }
+    const post = await this.findApprovedOne(postId);
 
     const existingLike = await this.likesRepository.findOne({
       where: { user: { id: userId }, post: { id: postId } },
@@ -191,20 +201,13 @@ export class PostsService {
     });
   }
 
-  async commentOnPost(userId: number, postId: number, content: string) {
+  async commentPost(userId: number, postId: number, content: string) {
     const user = await this.usersService.findOneById(userId);
     if (!user) {
       throw new NotFoundException('User not found');
     }
 
-    const post = await this.postsRepository.findOne({
-      where: { id: postId, status: PostStatus.APPROVED },
-      relations: ['user', 'likes', 'likes.user', 'comments', 'comments.user'],
-    });
-
-    if (!post) {
-      throw new NotFoundException('Post not found or not approved');
-    }
+    const post = await this.findApprovedOne(postId);
 
     const comment = new Comment();
     comment.user = user;

@@ -24,6 +24,14 @@ export default class PostService {
     return res.data;
   }
 
+  async fetchApprovedPostById(id: number): Promise<Post> {
+    const token = localStorage.getItem('token');
+    const res = await this.axiosInstance.get(`/posts/${id}/approved`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    return res.data;
+  }
+
   async fetchApprovedPosts(): Promise<Post[]> {
     const token = localStorage.getItem('token');
     const res = await this.axiosInstance.get("/posts/approved", {

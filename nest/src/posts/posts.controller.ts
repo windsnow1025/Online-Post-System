@@ -88,6 +88,12 @@ export class PostsController {
     return this.postsService.toPostDto(deletedPost);
   }
 
+  @Get('/:id/approved')
+  async findApprovedOne(@Param('id') id: number) {
+    const post = await this.postsService.findApprovedOne(id);
+    return this.postsService.toPostDto(post);
+  }
+
   @Post('/:id/like')
   async likePost(@Request() req: RequestWithUser, @Param('id') id: number) {
     const userId = req.user.sub;
@@ -102,7 +108,7 @@ export class PostsController {
     @Body('content') content: string,
   ) {
     const userId = req.user.sub;
-    const post = await this.postsService.commentOnPost(userId, id, content);
+    const post = await this.postsService.commentPost(userId, id, content);
     return this.postsService.toPostDto(post!);
   }
 
@@ -114,7 +120,7 @@ export class PostsController {
   }
 
   @Put('/:postId/comment/:commentId')
-  async reviseComment(
+  async updateComment(
     @Request() req: RequestWithUser,
     @Param('postId') postId: number,
     @Param('commentId') commentId: number,

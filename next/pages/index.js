@@ -41,19 +41,6 @@ function Index() {
     setSelectedPost(post);
   };
 
-  const handleDelete = async (postId) => {
-    const postService = new PostService();
-    try {
-      await postService.deletePost(postId);
-      setPosts(posts.filter(post => post.id !== postId));
-      if (selectedPost.id === postId) {
-        setSelectedPost(posts.length > 1 ? posts[0] : null);
-      }
-    } catch (err) {
-      console.error("Failed to delete post:", err);
-    }
-  };
-
   const handleUpdate = (updatedPost) => {
     setSelectedPost(updatedPost);
     setPosts(posts.map(post => post.id === updatedPost.id ? updatedPost : post));
@@ -75,7 +62,7 @@ function Index() {
                 <CircularProgress />
               ) : (
                 selectedPost && (
-                  <PublicPostDiv post={selectedPost} onDelete={handleDelete} onUpdate={handleUpdate} />
+                  <PublicPostDiv post={selectedPost} onUpdate={handleUpdate} />
                 )
               )}
             </Grid>
