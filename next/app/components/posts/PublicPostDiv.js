@@ -1,15 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Box, Typography, Divider, IconButton, Tooltip, TextField, Avatar, Snackbar, Alert } from "@mui/material";
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import CancelIcon from '@mui/icons-material/Cancel';
-import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import EditIcon from '@mui/icons-material/Edit';
 import SendIcon from '@mui/icons-material/Send';
 import Link from 'next/link';
-import { PostStatus } from '../../../src/post/Post';
 import PostService from '../../../src/post/PostService';
 import UserLogic from '../../../src/common/user/UserLogic';
 
@@ -28,18 +24,6 @@ function PublicPostDiv({ post, onDelete, onUpdate }) {
     };
     fetchUserId();
   }, []);
-
-  const getStatusIcon = (status) => {
-    switch (status) {
-      case PostStatus.APPROVED:
-        return <CheckCircleIcon color="success" />;
-      case PostStatus.REJECTED:
-        return <CancelIcon color="error" />;
-      case PostStatus.PENDING:
-      default:
-        return <HourglassEmptyIcon color="warning" />;
-    }
-  };
 
   const handleLike = async () => {
     const postService = new PostService();
