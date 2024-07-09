@@ -2,7 +2,21 @@
 
 import React, { useEffect, useState } from "react";
 import { ThemeProvider } from "@mui/material/styles";
-import { CssBaseline, CircularProgress, Snackbar, Alert, Typography, Grid, List, ListItem, ListItemText, ListItemAvatar, Avatar, Button } from "@mui/material";
+import {
+  CssBaseline,
+  CircularProgress,
+  Snackbar,
+  Alert,
+  Typography,
+  Grid,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemAvatar,
+  Avatar,
+  Button,
+  ListItemButton
+} from "@mui/material";
 import useThemeHandler from "../app/hooks/useThemeHandler";
 import HeaderAppBar from "../app/components/common/HeaderAppBar";
 import PostService from "../src/post/PostService";
@@ -76,11 +90,16 @@ function Index() {
               </Typography>
               <List>
                 {posts.map((post) => (
-                  <ListItem button key={post.id} onClick={() => handlePostClick(post)}>
-                    <ListItemAvatar>
-                      <Avatar>{getInitials(post.user.username)}</Avatar>
-                    </ListItemAvatar>
-                    <ListItemText primary={post.title} secondary={post.user.username} />
+                  <ListItem
+                    key={post.id}
+                    onClick={() => handlePostClick(post)}
+                  >
+                    <ListItemButton>
+                      <ListItemAvatar>
+                        <Avatar>{getInitials(post.user.username)}</Avatar>
+                      </ListItemAvatar>
+                      <ListItemText primary={post.title} secondary={post.user.username} />
+                    </ListItemButton>
                   </ListItem>
                 ))}
               </List>
